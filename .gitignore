@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment secrets
+.env
+
+# Local IDE / Claude Code state
+.claude/
+
+# Benchmark output is intentionally tracked per phase (lab-notebook history).
+# Ignore only one-off scratch files.
+results/scratch_*

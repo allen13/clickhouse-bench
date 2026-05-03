@@ -1,0 +1,25 @@
+[project]
+name = "clickhouse-bench"
+version = "0.1.0"
+description = "ClickHouse Cloud setup, evaluation, and benchmarking toolkit"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "clickhouse-connect>=0.8.0",
+    "rich>=13.0.0",
+    "pandas>=2.0.0",
+    "matplotlib>=3.8.0",
+    "faker>=30.0.0",
+    "python-dotenv>=1.0.0",
+    "click>=8.1.0",
+]
+
+[project.scripts]
+clickhouse-bench = "src.main:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
