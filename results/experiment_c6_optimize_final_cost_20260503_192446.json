@@ -1,0 +1,29 @@
+{
+  "experiment_key": "c6_optimize_final_cost",
+  "timestamp": "20260503_192446",
+  "title": "OPTIMIZE TABLE \u2026 FINAL cost on a fragmented table",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-9ri6grr-0",
+    "uptime_s": 700
+  },
+  "settings": {
+    "batches": 50,
+    "rows_per_batch": 1000
+  },
+  "before": {
+    "active_parts": 6,
+    "rows": 50000,
+    "on_disk": "127.94 KiB",
+    "avg_merge_level": 1.3333333333333333
+  },
+  "after": {
+    "active_parts": 1,
+    "rows": 50000,
+    "on_disk": "124.63 KiB",
+    "avg_merge_level": 10.0
+  },
+  "optimize_wall_ms": 94.9,
+  "us_per_row": 1.9
+}

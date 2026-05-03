@@ -1,0 +1,178 @@
+{
+  "experiment_key": "c7_string_vs_native",
+  "timestamp": "20260503_192524",
+  "title": "String-for-everything vs native types",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-gvbvjl6-0",
+    "uptime_s": 742
+  },
+  "string": {
+    "storage": {
+      "rows": 100000,
+      "compressed": "3.56 MiB",
+      "uncompressed": "14.20 MiB",
+      "compressed_bytes": 3735453,
+      "ratio": 3.99
+    },
+    "filter_country_warm_avg_ms": 46.24
+  },
+  "native": {
+    "storage": {
+      "rows": 100000,
+      "compressed": "2.94 MiB",
+      "uncompressed": "9.73 MiB",
+      "compressed_bytes": 3084531,
+      "ratio": 3.31
+    },
+    "filter_country_warm_avg_ms": 44.36
+  },
+  "storage_savings_x": 1.21,
+  "per_column": [
+    {
+      "table": "exp_users_native",
+      "name": "age",
+      "type": "UInt8",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "city",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "country",
+      "type": "LowCardinality(String)",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "email",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "full_name",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "id",
+      "type": "UInt64",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "is_active",
+      "type": "UInt8",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "signup_date",
+      "type": "Date",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_native",
+      "name": "username",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "age",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "city",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "country",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "email",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "full_name",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "id",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "is_active",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "signup_date",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_string",
+      "name": "username",
+      "type": "String",
+      "compressed": "0.00 B",
+      "uncompressed": "0.00 B",
+      "compressed_bytes": 0
+    }
+  ]
+}

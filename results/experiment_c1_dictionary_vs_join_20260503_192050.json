@@ -1,0 +1,236 @@
+{
+  "experiment_key": "c1_dictionary_vs_join",
+  "timestamp": "20260503_192050",
+  "title": "Dictionary vs JOIN",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-9ri6grr-0",
+    "uptime_s": 470
+  },
+  "settings": {
+    "warm_runs": 5,
+    "dict_layout": "HASHED",
+    "dict_lifetime_min_max": [
+      300,
+      360
+    ]
+  },
+  "join": {
+    "sql": "SELECT u.country, count() AS orders, sum(o.total_price) AS revenue\n    FROM orders o\n    INNER JOIN users u ON u.id = o.user_id\n    GROUP BY u.country\n    ORDER BY revenue DESC",
+    "runs": [
+      {
+        "query_id": "c1-join-0-dab5941dff5d",
+        "wall_ms": 59.24,
+        "rows": 15,
+        "iteration": 0,
+        "server": {
+          "query_id": "c1-join-0-dab5941dff5d",
+          "query_duration_ms": 21,
+          "read_rows": 400000,
+          "read_bytes": 5700790,
+          "memory_usage": 27816183,
+          "peak_threads_usage": 17,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-join-1-415ed2583792",
+        "wall_ms": 56.21,
+        "rows": 15,
+        "iteration": 1,
+        "server": {
+          "query_id": "c1-join-1-415ed2583792",
+          "query_duration_ms": 19,
+          "read_rows": 400000,
+          "read_bytes": 5700790,
+          "memory_usage": 27815407,
+          "peak_threads_usage": 16,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-join-2-e210b0781cbf",
+        "wall_ms": 57.39,
+        "rows": 15,
+        "iteration": 2,
+        "server": {
+          "query_id": "c1-join-2-e210b0781cbf",
+          "query_duration_ms": 19,
+          "read_rows": 400000,
+          "read_bytes": 5700790,
+          "memory_usage": 27815951,
+          "peak_threads_usage": 16,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-join-3-4e0693cfde53",
+        "wall_ms": 57.68,
+        "rows": 15,
+        "iteration": 3,
+        "server": {
+          "query_id": "c1-join-3-4e0693cfde53",
+          "query_duration_ms": 19,
+          "read_rows": 400000,
+          "read_bytes": 5700790,
+          "memory_usage": 27816279,
+          "peak_threads_usage": 16,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-join-4-e3ab3099fc00",
+        "wall_ms": 56.6,
+        "rows": 15,
+        "iteration": 4,
+        "server": {
+          "query_id": "c1-join-4-e3ab3099fc00",
+          "query_duration_ms": 18,
+          "read_rows": 400000,
+          "read_bytes": 5700790,
+          "memory_usage": 27816271,
+          "peak_threads_usage": 15,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-join-5-f570cec9be1a",
+        "wall_ms": 56.13,
+        "rows": 15,
+        "iteration": 5,
+        "server": {
+          "query_id": "c1-join-5-f570cec9be1a",
+          "query_duration_ms": 17,
+          "read_rows": 400000,
+          "read_bytes": 5700790,
+          "memory_usage": 27816423,
+          "peak_threads_usage": 15,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 56.8
+  },
+  "dictGet": {
+    "sql": "SELECT\n        dictGet('exp_users_dict', 'country', user_id) AS country,\n        count() AS orders,\n        sum(total_price) AS revenue\n    FROM orders\n    GROUP BY country\n    ORDER BY revenue DESC",
+    "runs": [
+      {
+        "query_id": "c1-dict-0-fff5f2f03365",
+        "wall_ms": 52.29,
+        "rows": 15,
+        "iteration": 0,
+        "server": {
+          "query_id": "c1-dict-0-fff5f2f03365",
+          "query_duration_ms": 11,
+          "read_rows": 300000,
+          "read_bytes": 4800000,
+          "memory_usage": 17433819,
+          "peak_threads_usage": 14,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-dict-1-5b6b0a04e262",
+        "wall_ms": 48.42,
+        "rows": 15,
+        "iteration": 1,
+        "server": {
+          "query_id": "c1-dict-1-5b6b0a04e262",
+          "query_duration_ms": 11,
+          "read_rows": 300000,
+          "read_bytes": 4800000,
+          "memory_usage": 17433691,
+          "peak_threads_usage": 14,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-dict-2-be2cbc339a83",
+        "wall_ms": 49.62,
+        "rows": 15,
+        "iteration": 2,
+        "server": {
+          "query_id": "c1-dict-2-be2cbc339a83",
+          "query_duration_ms": 12,
+          "read_rows": 300000,
+          "read_bytes": 4800000,
+          "memory_usage": 17433435,
+          "peak_threads_usage": 14,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-dict-3-23d0e31accee",
+        "wall_ms": 50.69,
+        "rows": 15,
+        "iteration": 3,
+        "server": {
+          "query_id": "c1-dict-3-23d0e31accee",
+          "query_duration_ms": 11,
+          "read_rows": 300000,
+          "read_bytes": 4800000,
+          "memory_usage": 17433803,
+          "peak_threads_usage": 15,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-dict-4-050138d75eba",
+        "wall_ms": 50.76,
+        "rows": 15,
+        "iteration": 4,
+        "server": {
+          "query_id": "c1-dict-4-050138d75eba",
+          "query_duration_ms": 13,
+          "read_rows": 300000,
+          "read_bytes": 4800000,
+          "memory_usage": 17432795,
+          "peak_threads_usage": 13,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c1-dict-5-5b1a0ef79395",
+        "wall_ms": 49.19,
+        "rows": 15,
+        "iteration": 5,
+        "server": {
+          "query_id": "c1-dict-5-5b1a0ef79395",
+          "query_duration_ms": 10,
+          "read_rows": 300000,
+          "read_bytes": 4800000,
+          "memory_usage": 17433403,
+          "peak_threads_usage": 14,
+          "query_cache_usage": "None",
+          "result_rows": 15,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 49.74
+  },
+  "dict_speedup_x": 1.14
+}

@@ -1,0 +1,30 @@
+{
+  "experiment_key": "c4_async_inserts",
+  "timestamp": "20260503_192314",
+  "title": "Async inserts vs synchronous inserts (100-row batches \u00d7 100)",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-9ri6grr-0",
+    "uptime_s": 581
+  },
+  "settings": {
+    "total_rows": 10000,
+    "batch": 100,
+    "num_batches": 100
+  },
+  "synchronous": {
+    "wall_ms": 9615.9,
+    "active_parts": 5,
+    "rows": 10000,
+    "on_disk": "17.75 KiB"
+  },
+  "async": {
+    "wall_ms": 15320.7,
+    "active_parts": 5,
+    "rows": 10000,
+    "on_disk": "17.78 KiB"
+  },
+  "wall_speedup_x": 0.63,
+  "parts_ratio_sync_to_async": 1.0
+}

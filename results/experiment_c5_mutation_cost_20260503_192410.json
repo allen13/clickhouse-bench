@@ -1,0 +1,30 @@
+{
+  "experiment_key": "c5_mutation_cost",
+  "timestamp": "20260503_192410",
+  "title": "Mutation cost (ALTER UPDATE) vs ReplacingMergeTree insert",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-9ri6grr-0",
+    "uptime_s": 669
+  },
+  "settings": {
+    "rows": 100000,
+    "updates": 1000
+  },
+  "mutation": {
+    "wall_ms": 1060.5,
+    "parts_before": 1,
+    "parts_after": 1,
+    "size": "258.02 KiB"
+  },
+  "replacing_merge_tree": {
+    "wall_ms": 96.0,
+    "parts_before": 1,
+    "parts_after": 2,
+    "size": "262.35 KiB",
+    "read_final_ms": 44.1,
+    "read_argmax_ms": 44.8
+  },
+  "mutation_to_rmt_ratio": 11.04
+}

@@ -1,0 +1,172 @@
+{
+  "experiment_key": "c8_nullable_overhead",
+  "timestamp": "20260503_192714",
+  "title": "Nullable(T) overhead vs DEFAULT",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-gvbvjl6-0",
+    "uptime_s": 853
+  },
+  "nullable": {
+    "storage": {
+      "rows": 100000,
+      "compressed": "2.70 MiB",
+      "uncompressed": "8.58 MiB",
+      "compressed_bytes": 2829607
+    },
+    "uniq_country_warm_avg_ms": 44.78
+  },
+  "default": {
+    "storage": {
+      "rows": 100000,
+      "compressed": "2.94 MiB",
+      "uncompressed": "10.11 MiB",
+      "compressed_bytes": 3085697
+    },
+    "uniq_country_warm_avg_ms": 45.47
+  },
+  "overhead_ratio": 0.92,
+  "per_column": [
+    {
+      "table": "exp_users_default",
+      "name": "age",
+      "type": "UInt8",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "city",
+      "type": "String",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "country",
+      "type": "LowCardinality(String)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "created_at",
+      "type": "DateTime",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "email",
+      "type": "String",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "full_name",
+      "type": "String",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "id",
+      "type": "UInt64",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "is_active",
+      "type": "UInt8",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "signup_date",
+      "type": "Date",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_default",
+      "name": "username",
+      "type": "String",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "age",
+      "type": "Nullable(UInt8)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "city",
+      "type": "Nullable(String)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "country",
+      "type": "Nullable(String)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "created_at",
+      "type": "Nullable(DateTime)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "email",
+      "type": "Nullable(String)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "full_name",
+      "type": "Nullable(String)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "id",
+      "type": "Nullable(UInt64)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "is_active",
+      "type": "Nullable(UInt8)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "signup_date",
+      "type": "Nullable(Date)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    },
+    {
+      "table": "exp_users_nullable",
+      "name": "username",
+      "type": "Nullable(String)",
+      "compressed": "0.00 B",
+      "compressed_bytes": 0
+    }
+  ]
+}

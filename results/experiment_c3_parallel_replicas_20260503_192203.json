@@ -1,0 +1,339 @@
+{
+  "experiment_key": "c3_parallel_replicas",
+  "timestamp": "20260503_192203",
+  "title": "Parallel replicas speed-up",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-fm1f6ej-0",
+    "uptime_s": 542
+  },
+  "settings": {
+    "warm_runs_per_config": 5
+  },
+  "serial": {
+    "runs": [
+      {
+        "query_id": "c3-serial-0-5d784944d971",
+        "wall_ms": 90.63,
+        "rows": 3294,
+        "iteration": 0,
+        "server": {
+          "query_id": "c3-serial-0-5d784944d971",
+          "query_duration_ms": 51,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95366251,
+          "peak_threads_usage": 29,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-serial-1-8dc7925b096a",
+        "wall_ms": 99.02,
+        "rows": 3294,
+        "iteration": 1,
+        "server": {
+          "query_id": "c3-serial-1-8dc7925b096a",
+          "query_duration_ms": 53,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95435235,
+          "peak_threads_usage": 26,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-serial-2-054660818966",
+        "wall_ms": 83.34,
+        "rows": 3294,
+        "iteration": 2,
+        "server": {
+          "query_id": "c3-serial-2-054660818966",
+          "query_duration_ms": 43,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 90645964,
+          "peak_threads_usage": 28,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-serial-3-66c6e62fe25f",
+        "wall_ms": 84.45,
+        "rows": 3294,
+        "iteration": 3,
+        "server": {
+          "query_id": "c3-serial-3-66c6e62fe25f",
+          "query_duration_ms": 45,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 90646252,
+          "peak_threads_usage": 24,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-serial-4-250a9e44cdb7",
+        "wall_ms": 85.22,
+        "rows": 3294,
+        "iteration": 4,
+        "server": {
+          "query_id": "c3-serial-4-250a9e44cdb7",
+          "query_duration_ms": 44,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 90646140,
+          "peak_threads_usage": 25,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-serial-5-62cb7651f3ed",
+        "wall_ms": 82.61,
+        "rows": 3294,
+        "iteration": 5,
+        "server": {
+          "query_id": "c3-serial-5-62cb7651f3ed",
+          "query_duration_ms": 43,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 91168747,
+          "peak_threads_usage": 23,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 86.93
+  },
+  "parallel_2": {
+    "runs": [
+      {
+        "query_id": "c3-pr2-0-278e0e213a02",
+        "wall_ms": 150.17,
+        "rows": 3294,
+        "iteration": 0,
+        "server": {
+          "query_id": "c3-pr2-0-278e0e213a02",
+          "query_duration_ms": 112,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 64181646,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr2-1-a2abef6ab0bd",
+        "wall_ms": 143.17,
+        "rows": 3294,
+        "iteration": 1,
+        "server": {
+          "query_id": "c3-pr2-1-a2abef6ab0bd",
+          "query_duration_ms": 103,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 65084845,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr2-2-78c97e8e42d7",
+        "wall_ms": 151.76,
+        "rows": 3294,
+        "iteration": 2,
+        "server": {
+          "query_id": "c3-pr2-2-78c97e8e42d7",
+          "query_duration_ms": 112,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 72548042,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr2-3-b6d9e4f9d6a8",
+        "wall_ms": 134.06,
+        "rows": 3294,
+        "iteration": 3,
+        "server": {
+          "query_id": "c3-pr2-3-b6d9e4f9d6a8",
+          "query_duration_ms": 96,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 72552218,
+          "peak_threads_usage": 9,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr2-4-d9e8d745594a",
+        "wall_ms": 130.65,
+        "rows": 3294,
+        "iteration": 4,
+        "server": {
+          "query_id": "c3-pr2-4-d9e8d745594a",
+          "query_duration_ms": 92,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 72548530,
+          "peak_threads_usage": 8,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr2-5-ebbb8fec9d0a",
+        "wall_ms": 101.53,
+        "rows": 3294,
+        "iteration": 5,
+        "server": {
+          "query_id": "c3-pr2-5-ebbb8fec9d0a",
+          "query_duration_ms": 62,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 48722707,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 132.23
+  },
+  "parallel_3": {
+    "runs": [
+      {
+        "query_id": "c3-pr3-0-795cc66aba66",
+        "wall_ms": 141.41,
+        "rows": 3294,
+        "iteration": 0,
+        "server": {
+          "query_id": "c3-pr3-0-795cc66aba66",
+          "query_duration_ms": 100,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 55442351,
+          "peak_threads_usage": 9,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr3-1-ad5cabfeced1",
+        "wall_ms": 139.64,
+        "rows": 3294,
+        "iteration": 1,
+        "server": {
+          "query_id": "c3-pr3-1-ad5cabfeced1",
+          "query_duration_ms": 97,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 51537141,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr3-2-9c695da7238c",
+        "wall_ms": 139.21,
+        "rows": 3294,
+        "iteration": 2,
+        "server": {
+          "query_id": "c3-pr3-2-9c695da7238c",
+          "query_duration_ms": 99,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 56287949,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr3-3-b74657ffba4d",
+        "wall_ms": 139.42,
+        "rows": 3294,
+        "iteration": 3,
+        "server": {
+          "query_id": "c3-pr3-3-b74657ffba4d",
+          "query_duration_ms": 99,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 56287677,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr3-4-477b154b05fb",
+        "wall_ms": 131.74,
+        "rows": 3294,
+        "iteration": 4,
+        "server": {
+          "query_id": "c3-pr3-4-477b154b05fb",
+          "query_duration_ms": 90,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 51606662,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "c3-pr3-5-34bf4d54512f",
+        "wall_ms": 132.51,
+        "rows": 3294,
+        "iteration": 5,
+        "server": {
+          "query_id": "c3-pr3-5-34bf4d54512f",
+          "query_duration_ms": 92,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 47815110,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 136.5
+  },
+  "speedup_2x": 0.66,
+  "speedup_3x": 0.64,
+  "final_explain_error": "Received ClickHouse exception, code: 181, server response: Code: 181. DB::Exception: Storage SharedMergeTree doesn't support FINAL. (ILLEGAL_FINAL) (for url https://iei5urj7xg.us-east-1.aws.clickhouse.cloud:8443)",
+  "final_compatible": false
+}
