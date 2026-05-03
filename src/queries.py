@@ -278,14 +278,19 @@ QUERIES: list[BenchmarkQuery] = [
         name="ts_gap_detection",
         category=Category.TIMESERIES,
         sql="""
-            SELECT sensor_id,
-                   timestamp,
-                   dateDiff('second', lagInFrame(timestamp, 1, timestamp) OVER (
-                       PARTITION BY sensor_id ORDER BY timestamp
-                   ), timestamp) AS gap_seconds
-            FROM metrics
-            WHERE sensor_id = 1
-            HAVING gap_seconds > 30
+            SELECT sensor_id, timestamp, gap_seconds
+            FROM (
+                SELECT sensor_id,
+                       timestamp,
+                       dateDiff('second',
+                                lagInFrame(timestamp, 1, timestamp) OVER (
+                                    PARTITION BY sensor_id ORDER BY timestamp
+                                ),
+                                timestamp) AS gap_seconds
+                FROM metrics
+                WHERE sensor_id = 1
+            )
+            WHERE gap_seconds > 30
             ORDER BY timestamp
             LIMIT 500
         """,

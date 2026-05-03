@@ -1,0 +1,15 @@
+ClickHouse Benchmark Evaluation
+========================================
+Timestamp: 2026-05-03T19:15:34.329160
+ClickHouse Version: 25.12.1.1497
+
+Queries Benchmarked: 18
+Avg Cold Latency:    94.0 ms
+Avg Warm Latency:    82.6 ms
+P50 Warm Latency:    62.2 ms
+P95 Warm Latency:    157.2 ms
+
+Recommendations:
+  1. Top-10% slowest queries (>98 ms warm): range_events_time, join_three_tables. Review their query plans.
+  2. Join queries are significantly slower than the median. Consider denormalising hot paths or using materialised views.
+  3. Best insert throughput: 194,966 rows/s at batch size 50,000. Use this batch size for bulk loads.

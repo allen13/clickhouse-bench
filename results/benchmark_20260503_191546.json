@@ -1,0 +1,384 @@
+{
+  "timestamp": "2026-05-03T19:15:34.329160",
+  "clickhouse_version": "25.12.1.1497",
+  "config": {
+    "host": "iei5urj7xg.us-east-1.aws.clickhouse.cloud",
+    "port": "8443",
+    "user": "default",
+    "password": "***",
+    "database": "default",
+    "secure": "True"
+  },
+  "query_results": [
+    {
+      "query_name": "point_user_by_id",
+      "category": "point_query",
+      "cold_time_ms": 47.925,
+      "warm_times_ms": [
+        45.081,
+        45.595,
+        44.783,
+        44.345,
+        44.663
+      ],
+      "avg_warm_ms": 44.893,
+      "min_warm_ms": 44.345,
+      "max_warm_ms": 45.595,
+      "rows_returned": 1,
+      "memory_peak_kb": 283.22,
+      "error": null
+    },
+    {
+      "query_name": "point_order_by_id",
+      "category": "point_query",
+      "cold_time_ms": 45.654,
+      "warm_times_ms": [
+        46.088,
+        43.154,
+        43.689,
+        46.071,
+        46.151
+      ],
+      "avg_warm_ms": 45.031,
+      "min_warm_ms": 43.154,
+      "max_warm_ms": 46.151,
+      "rows_returned": 1,
+      "memory_peak_kb": 283.14,
+      "error": null
+    },
+    {
+      "query_name": "range_orders_date",
+      "category": "range_scan",
+      "cold_time_ms": 97.749,
+      "warm_times_ms": [
+        60.093,
+        55.524,
+        55.386,
+        55.891,
+        56.407
+      ],
+      "avg_warm_ms": 56.66,
+      "min_warm_ms": 55.386,
+      "max_warm_ms": 60.093,
+      "rows_returned": 10000,
+      "memory_peak_kb": 771.93,
+      "error": null
+    },
+    {
+      "query_name": "range_users_age",
+      "category": "range_scan",
+      "cold_time_ms": 114.05,
+      "warm_times_ms": [
+        76.33,
+        77.751,
+        77.085,
+        78.373,
+        77.206
+      ],
+      "avg_warm_ms": 77.349,
+      "min_warm_ms": 76.33,
+      "max_warm_ms": 78.373,
+      "rows_returned": 17632,
+      "memory_peak_kb": 2072.98,
+      "error": null
+    },
+    {
+      "query_name": "range_events_time",
+      "category": "range_scan",
+      "cold_time_ms": 224.44,
+      "warm_times_ms": [
+        116.979,
+        116.338,
+        112.219,
+        110.753,
+        111.507
+      ],
+      "avg_warm_ms": 113.559,
+      "min_warm_ms": 110.753,
+      "max_warm_ms": 116.979,
+      "rows_returned": 19377,
+      "memory_peak_kb": 2246.3,
+      "error": null
+    },
+    {
+      "query_name": "agg_count_by_country",
+      "category": "aggregation",
+      "cold_time_ms": 43.612,
+      "warm_times_ms": [
+        44.464,
+        44.233,
+        45.337,
+        46.903,
+        43.726
+      ],
+      "avg_warm_ms": 44.933,
+      "min_warm_ms": 43.726,
+      "max_warm_ms": 46.903,
+      "rows_returned": 15,
+      "memory_peak_kb": 283.42,
+      "error": null
+    },
+    {
+      "query_name": "agg_revenue_by_category",
+      "category": "aggregation",
+      "cold_time_ms": 48.65,
+      "warm_times_ms": [
+        47.996,
+        47.67,
+        62.511,
+        46.702,
+        45.919
+      ],
+      "avg_warm_ms": 50.16,
+      "min_warm_ms": 45.919,
+      "max_warm_ms": 62.511,
+      "rows_returned": 5,
+      "memory_peak_kb": 279.76,
+      "error": null
+    },
+    {
+      "query_name": "agg_daily_events",
+      "category": "aggregation",
+      "cold_time_ms": 64.139,
+      "warm_times_ms": [
+        67.719,
+        63.351,
+        63.423,
+        65.158,
+        66.018
+      ],
+      "avg_warm_ms": 65.134,
+      "min_warm_ms": 63.351,
+      "max_warm_ms": 67.719,
+      "rows_returned": 3294,
+      "memory_peak_kb": 283.61,
+      "error": null
+    },
+    {
+      "query_name": "agg_heavy_uniq",
+      "category": "aggregation",
+      "cold_time_ms": 70.409,
+      "warm_times_ms": [
+        70.718,
+        69.12,
+        83.548,
+        69.145,
+        69.487
+      ],
+      "avg_warm_ms": 72.404,
+      "min_warm_ms": 69.12,
+      "max_warm_ms": 83.548,
+      "rows_returned": 366,
+      "memory_peak_kb": 279.75,
+      "error": null
+    },
+    {
+      "query_name": "join_user_orders",
+      "category": "join",
+      "cold_time_ms": 88.535,
+      "warm_times_ms": [
+        78.639,
+        80.686,
+        77.19,
+        79.232,
+        76.861
+      ],
+      "avg_warm_ms": 78.522,
+      "min_warm_ms": 76.861,
+      "max_warm_ms": 80.686,
+      "rows_returned": 100,
+      "memory_peak_kb": 283.86,
+      "error": null
+    },
+    {
+      "query_name": "join_three_tables",
+      "category": "join",
+      "cold_time_ms": 386.936,
+      "warm_times_ms": [
+        396.143,
+        399.027,
+        406.936,
+        381.801,
+        438.765
+      ],
+      "avg_warm_ms": 404.534,
+      "min_warm_ms": 381.801,
+      "max_warm_ms": 438.765,
+      "rows_returned": 50,
+      "memory_peak_kb": 285.76,
+      "error": null
+    },
+    {
+      "query_name": "window_running_total",
+      "category": "window_function",
+      "cold_time_ms": 71.042,
+      "warm_times_ms": [
+        73.578,
+        68.006,
+        68.529,
+        69.509,
+        69.066
+      ],
+      "avg_warm_ms": 69.738,
+      "min_warm_ms": 68.006,
+      "max_warm_ms": 73.578,
+      "rows_returned": 1000,
+      "memory_peak_kb": 282.17,
+      "error": null
+    },
+    {
+      "query_name": "window_rank_users",
+      "category": "window_function",
+      "cold_time_ms": 59.499,
+      "warm_times_ms": [
+        66.045,
+        62.952,
+        65.359,
+        63.948,
+        62.577
+      ],
+      "avg_warm_ms": 64.176,
+      "min_warm_ms": 62.577,
+      "max_warm_ms": 66.045,
+      "rows_returned": 100,
+      "memory_peak_kb": 283.71,
+      "error": null
+    },
+    {
+      "query_name": "window_moving_avg",
+      "category": "window_function",
+      "cold_time_ms": 50.837,
+      "warm_times_ms": [
+        47.431,
+        47.129,
+        47.388,
+        47.334,
+        48.26
+      ],
+      "avg_warm_ms": 47.508,
+      "min_warm_ms": 47.129,
+      "max_warm_ms": 48.26,
+      "rows_returned": 500,
+      "memory_peak_kb": 284.57,
+      "error": null
+    },
+    {
+      "query_name": "ts_downsample_1min",
+      "category": "time_series",
+      "cold_time_ms": 123.096,
+      "warm_times_ms": [
+        116.815,
+        80.522,
+        100.338,
+        75.78,
+        80.959
+      ],
+      "avg_warm_ms": 90.883,
+      "min_warm_ms": 75.78,
+      "max_warm_ms": 116.815,
+      "rows_returned": 5000,
+      "memory_peak_kb": 550.83,
+      "error": null
+    },
+    {
+      "query_name": "ts_downsample_1hr",
+      "category": "time_series",
+      "cold_time_ms": 55.734,
+      "warm_times_ms": [
+        58.286,
+        58.636,
+        70.645,
+        56.567,
+        56.846
+      ],
+      "avg_warm_ms": 60.196,
+      "min_warm_ms": 56.567,
+      "max_warm_ms": 70.645,
+      "rows_returned": 2996,
+      "memory_peak_kb": 297.57,
+      "error": null
+    },
+    {
+      "query_name": "ts_rate_of_change",
+      "category": "time_series",
+      "cold_time_ms": 53.387,
+      "warm_times_ms": [
+        52.566,
+        52.954,
+        53.096,
+        54.099,
+        54.886
+      ],
+      "avg_warm_ms": 53.52,
+      "min_warm_ms": 52.566,
+      "max_warm_ms": 54.886,
+      "rows_returned": 2000,
+      "memory_peak_kb": 299.56,
+      "error": null
+    },
+    {
+      "query_name": "ts_gap_detection",
+      "category": "time_series",
+      "cold_time_ms": 46.437,
+      "warm_times_ms": [
+        46.999,
+        47.731,
+        50.125,
+        47.194,
+        47.561
+      ],
+      "avg_warm_ms": 47.922,
+      "min_warm_ms": 46.999,
+      "max_warm_ms": 50.125,
+      "rows_returned": 500,
+      "memory_peak_kb": 284.85,
+      "error": null
+    },
+    {
+      "query_name": "compression_ratio",
+      "category": "compression",
+      "cold_time_ms": 0,
+      "warm_times_ms": [],
+      "avg_warm_ms": 0,
+      "min_warm_ms": 0,
+      "max_warm_ms": 0,
+      "rows_returned": 4,
+      "memory_peak_kb": 0,
+      "error": null
+    },
+    {
+      "query_name": "column_compression",
+      "category": "compression",
+      "cold_time_ms": 0,
+      "warm_times_ms": [],
+      "avg_warm_ms": 0,
+      "min_warm_ms": 0,
+      "max_warm_ms": 0,
+      "rows_returned": 37,
+      "memory_peak_kb": 0,
+      "error": null
+    }
+  ],
+  "insert_results": [
+    {
+      "batch_size": 100,
+      "elapsed_ms": 314.91,
+      "rows_per_second": 318.0
+    },
+    {
+      "batch_size": 1000,
+      "elapsed_ms": 175.45,
+      "rows_per_second": 5700.0
+    },
+    {
+      "batch_size": 10000,
+      "elapsed_ms": 156.81,
+      "rows_per_second": 63772.0
+    },
+    {
+      "batch_size": 50000,
+      "elapsed_ms": 256.45,
+      "rows_per_second": 194966.0
+    }
+  ]
+}
