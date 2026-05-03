@@ -113,37 +113,37 @@ Warm-avg latency (ms):
 > _LowCardinality typically halves storage and doubles GROUP BY speed for low-cardinality columns.  Don't use it for high-cardinality columns (>100K distinct values) — the dictionary overhead dominates._
 
 ### materialized_views
-- File: `compare_features_20260503_191723.json`  | Title: Materialized views: streaming pre-aggregation
+- File: `compare_features_20260503_194828.json`  | Title: Materialized views: streaming pre-aggregation
 
 | Variant | Compressed | Ratio | Insert (s) | Notes |
 |---|---|---|---|---|
-| Raw events (source for MV) | 7.31 MiB | 2.74× | 0.39 | OK |
+| Raw events (source for MV) | 74.29 MiB | 2.70× | 1.71 | OK |
 | MV target: daily event counts | 0.00 MiB | 0.00× | 0.00 | OK |
 
 Warm-avg latency (ms):
 | Test query | Raw events (source for MV) | MV target: daily event counts |
 |---|---|---|
-| raw_daily_count | 57.4 | 57.2 |
-| mv_daily_count | 40.7 | 40.1 |
+| raw_daily_count | 196.7 | 167.1 |
+| mv_daily_count | 41.0 | 41.2 |
 
 > _Querying the MV target should be near-instant regardless of base table size, while the raw query scales with the base table.  Cost: every insert into the source table runs the MV's GROUP BY._
 
 ### ordering
-- File: `compare_features_20260503_191654.json`  | Title: ORDER BY key comparison (primary index)
+- File: `compare_features_20260503_194824.json`  | Title: ORDER BY key comparison (primary index)
 
 | Variant | Compressed | Ratio | Insert (s) | Notes |
 |---|---|---|---|---|
-| ORDER BY (user_id, event_time) | 28.65 MiB | 3.00× | 1.19 | OK |
-| ORDER BY (event_time, user_id) | 30.64 MiB | 2.80× | 1.10 | OK |
-| ORDER BY (event_type, event_time, user_id) | 30.54 MiB | 2.81× | 1.18 | OK |
+| ORDER BY (user_id, event_time) | 287.74 MiB | 2.99× | 4.89 | OK |
+| ORDER BY (event_time, user_id) | 309.42 MiB | 2.78× | 5.93 | OK |
+| ORDER BY (event_type, event_time, user_id) | 308.45 MiB | 2.79× | 7.23 | OK |
 
 Warm-avg latency (ms):
 | Test query | ORDER BY (user_id, event_time) | ORDER BY (event_time, user_id) | ORDER BY (event_type, event_time, user_id) |
 |---|---|---|---|
-| by_user | 43.3 | 45.2 | 45.0 |
-| by_time | 45.7 | 47.7 | 44.3 |
-| by_type | 43.8 | 53.4 | 42.3 |
-| user_and_time | 41.8 | 46.2 | 49.2 |
+| by_user | 41.4 | 43.1 | 43.4 |
+| by_time | 64.5 | 40.9 | 46.4 |
+| by_type | 60.5 | 61.4 | 42.2 |
+| user_and_time | 41.5 | 45.8 | 49.1 |
 
 > _user_first wins by_user; time_first wins by_time; type_first wins by_type. The first column of ORDER BY is the most selective — pick it based on your highest-frequency query shape.  Compound ORDER BY also affects column compression: data sorts more compressibly under one key than another._
 
@@ -260,6 +260,12 @@ Warm-avg latency (ms):
 - Projection vs Materialized View — same pre-aggregation shape
   - `read_speed_mv_to_proj` = **1.02**
 
+### `experiment_e1_parallel_replicas_curve_10000000rows_20260503_194839.json`
+- Parallel replicas scaling curve
+  - `speedup_2x` = **1.23**
+  - `speedup_3x` = **1.2**
+  - events row count when run: 10,000,000
+
 ### `experiment_e1_parallel_replicas_curve_1000000rows_20260503_193216.json`
 - Parallel replicas scaling curve
   - `speedup_2x` = **0.71**
@@ -282,5 +288,6 @@ Pricing snapshot — capture this from the ClickHouse Cloud pricing page on the 
 |---|---|---|
 | Avg warm query (n=18) | ~$0.000016 | n/a |
 | events table — ORDER BY (user_id, event_time) (191654) | n/a | ~$0.0007/mo |
+| events table — ORDER BY (user_id, event_time) (194824) | n/a | ~$0.0073/mo |
 
 Replace the placeholder numbers with the live pricing page on publication day; `_per_query_cost_usd` and `_storage_cost_per_month` in this script encode the formulas.
