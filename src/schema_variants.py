@@ -776,6 +776,184 @@ PARTITIONING = FeatureComparison(
 
 
 # ---------------------------------------------------------------------------
+# 9. index_granularity tuning (Phase D)
+# ---------------------------------------------------------------------------
+
+def _events_ddl_with_granularity(name: str, granularity: int) -> str:
+    return f"""
+        CREATE TABLE {name} (
+            id UInt64,
+            user_id UInt64,
+            event_type LowCardinality(String),
+            page String,
+            session_id String,
+            properties String,
+            event_time DateTime
+        ) ENGINE = MergeTree()
+        ORDER BY (user_id, event_time)
+        SETTINGS index_granularity = {granularity}
+    """
+
+
+INDEX_GRANULARITY = FeatureComparison(
+    key="index_granularity",
+    title="index_granularity tuning (sparse primary index)",
+    description=(
+        "The default index_granularity = 8192 sets one mark per 8192 rows.  "
+        "Smaller granularity → more marks → finer skipping but a larger in-RAM "
+        "primary index.  Larger granularity → coarser skipping, smaller index. "
+        "This comparison sweeps 1024 through 32768 to find the inflection."
+    ),
+    base_table="events",
+    variants=tuple(
+        SchemaVariant(
+            name=f"cmp_events_g{g}",
+            feature_label=f"index_granularity = {g}",
+            ddl=_events_ddl_with_granularity(f"cmp_events_g{g}", g),
+            insert_sql=(
+                f"INSERT INTO cmp_events_g{g} "
+                "SELECT id, user_id, event_type, page, session_id, "
+                "properties, event_time FROM events"
+            ),
+        )
+        for g in (1024, 4096, 8192, 16384, 32768)
+    ),
+    test_queries=(
+        ("by_user_lookup", "SELECT count() FROM {table} WHERE user_id = 42"),
+        ("by_user_range",
+         "SELECT count() FROM {table} WHERE user_id BETWEEN 1000 AND 1100"),
+        ("by_user_and_time",
+         "SELECT count() FROM {table} "
+         "WHERE user_id = 42 AND event_time >= now() - INTERVAL 30 DAY"),
+    ),
+    insight=(
+        "Smaller granularity wins on point lookups (more skipping) at the "
+        "cost of a larger in-memory primary index. Larger granularity is "
+        "lighter but reads more rows per match. The default 8192 is a "
+        "well-balanced compromise; only deviate when EXPLAIN ESTIMATE shows "
+        "the granule scan dominating and the index size is comfortable."
+    ),
+)
+
+
+# ---------------------------------------------------------------------------
+# 10. bloom filter false-positive rate tuning (Phase D)
+# ---------------------------------------------------------------------------
+
+def _events_ddl_with_bloom_fpr(name: str, fpr: float) -> str:
+    return f"""
+        CREATE TABLE {name} (
+            id UInt64,
+            user_id UInt64,
+            event_type LowCardinality(String),
+            page String,
+            session_id String,
+            properties String,
+            event_time DateTime,
+            INDEX idx_session session_id TYPE bloom_filter({fpr}) GRANULARITY 4
+        ) ENGINE = MergeTree() ORDER BY (user_id, event_time)
+    """
+
+
+BLOOM_FILTER_FPR = FeatureComparison(
+    key="bloom_filter_fpr",
+    title="bloom_filter false-positive rate tuning",
+    description=(
+        "The bloom_filter(p) parameter is the desired false-positive rate. "
+        "Lower p → larger filter → fewer wasted granule reads, but more "
+        "index storage. This comparison sweeps 0.001 / 0.01 / 0.05 on "
+        "session_id (high-cardinality) lookups."
+    ),
+    base_table="events",
+    variants=tuple(
+        SchemaVariant(
+            name=f"cmp_events_bf{label}",
+            feature_label=f"bloom_filter({fpr})",
+            ddl=_events_ddl_with_bloom_fpr(f"cmp_events_bf{label}", fpr),
+            insert_sql=(
+                f"INSERT INTO cmp_events_bf{label} "
+                "SELECT id, user_id, event_type, page, session_id, "
+                "properties, event_time FROM events"
+            ),
+        )
+        for label, fpr in (("001", 0.001), ("01", 0.01), ("05", 0.05))
+    ),
+    test_queries=(
+        ("session_known",
+         "SELECT count() FROM {table} "
+         "WHERE session_id = (SELECT session_id FROM {table} LIMIT 1)"),
+        ("session_unknown",
+         "SELECT count() FROM {table} "
+         "WHERE session_id = '00000000-0000-0000-0000-000000000000'"),
+    ),
+    insight=(
+        "Lower FPR cuts wasted granule reads on negative lookups but adds "
+        "index bytes. The 'unknown' query shows the maximum win for tighter "
+        "FPR — the filter rejects most granules outright. The 'known' query "
+        "still requires reading the matching granule regardless of FPR."
+    ),
+)
+
+
+# ---------------------------------------------------------------------------
+# 11. skip-index GRANULARITY tuning (Phase D)
+# ---------------------------------------------------------------------------
+
+def _events_ddl_with_skip_granularity(name: str, granularity: int) -> str:
+    return f"""
+        CREATE TABLE {name} (
+            id UInt64,
+            user_id UInt64,
+            event_type LowCardinality(String),
+            page String,
+            session_id String,
+            properties String,
+            event_time DateTime,
+            INDEX idx_session session_id TYPE bloom_filter(0.01) GRANULARITY {granularity}
+        ) ENGINE = MergeTree() ORDER BY (user_id, event_time)
+    """
+
+
+SKIP_INDEX_GRANULARITY = FeatureComparison(
+    key="skip_index_granularity",
+    title="Skip-index GRANULARITY tuning",
+    description=(
+        "Skip indexes' GRANULARITY parameter sets how many primary-index "
+        "granules each skip-index entry covers.  GRANULARITY 1 = one entry "
+        "per primary granule (finest skipping, largest index); GRANULARITY 16 "
+        "= one entry per 16 primary granules (coarsest)."
+    ),
+    base_table="events",
+    variants=tuple(
+        SchemaVariant(
+            name=f"cmp_events_sg{g}",
+            feature_label=f"GRANULARITY {g}",
+            ddl=_events_ddl_with_skip_granularity(f"cmp_events_sg{g}", g),
+            insert_sql=(
+                f"INSERT INTO cmp_events_sg{g} "
+                "SELECT id, user_id, event_type, page, session_id, "
+                "properties, event_time FROM events"
+            ),
+        )
+        for g in (1, 4, 16)
+    ),
+    test_queries=(
+        ("session_known",
+         "SELECT count() FROM {table} "
+         "WHERE session_id = (SELECT session_id FROM {table} LIMIT 1)"),
+        ("session_unknown",
+         "SELECT count() FROM {table} "
+         "WHERE session_id = '00000000-0000-0000-0000-000000000000'"),
+    ),
+    insight=(
+        "Finer GRANULARITY skips more granules at the cost of a larger "
+        "skip-index. The 'unknown' query is where finer wins; on 'known' "
+        "lookups the matching granule still has to be read either way."
+    ),
+)
+
+
+# ---------------------------------------------------------------------------
 # Registry
 # ---------------------------------------------------------------------------
 
@@ -788,6 +966,9 @@ ALL_COMPARISONS: tuple[FeatureComparison, ...] = (
     MATERIALIZED_VIEWS,
     SKIP_INDEXES,
     PARTITIONING,
+    INDEX_GRANULARITY,
+    BLOOM_FILTER_FPR,
+    SKIP_INDEX_GRANULARITY,
 )
 
 

@@ -1,0 +1,90 @@
+{
+  "experiment_key": "d4_projection_vs_mv",
+  "timestamp": "20260503_193059",
+  "title": "Projection vs Materialized View \u2014 same pre-aggregation shape",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-fm1f6ej-0",
+    "uptime_s": 1075
+  },
+  "projection": {
+    "insert_wall_ms": 1022.6,
+    "table_bytes": 30047439,
+    "projection_bytes": 4332,
+    "total_bytes": 30051771,
+    "read_warm_avg_ms": 43.95,
+    "read_runs": [
+      {
+        "query_id": "exp-00d80f7b762c",
+        "wall_ms": 46.16,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-700e9e579c62",
+        "wall_ms": 43.45,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-b0e453f45166",
+        "wall_ms": 43.47,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-e77bad436cc4",
+        "wall_ms": 43.91,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-ad09dabed09b",
+        "wall_ms": 45.65,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-2fa8c0332089",
+        "wall_ms": 43.26,
+        "rows": 3294
+      }
+    ]
+  },
+  "materialized_view": {
+    "insert_wall_ms": 1099.5,
+    "source_bytes": 30043107,
+    "target_bytes": 4317,
+    "total_bytes": 30047424,
+    "read_warm_avg_ms": 42.97,
+    "read_runs": [
+      {
+        "query_id": "exp-ddc5e397fbc2",
+        "wall_ms": 42.75,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-940c5f22df93",
+        "wall_ms": 43.49,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-b1d737cc1a4c",
+        "wall_ms": 43.08,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-4a8ec3068bdf",
+        "wall_ms": 42.47,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-41bb73df2a86",
+        "wall_ms": 42.37,
+        "rows": 3294
+      },
+      {
+        "query_id": "exp-eb657adbb0b8",
+        "wall_ms": 43.42,
+        "rows": 3294
+      }
+    ]
+  },
+  "read_speed_mv_to_proj": 1.02
+}

@@ -1,0 +1,85 @@
+[
+  {
+    "key": "bloom_filter_fpr",
+    "title": "bloom_filter false-positive rate tuning",
+    "timestamp": "2026-05-03T19:29:45.998344",
+    "insight": "Lower FPR cuts wasted granule reads on negative lookups but adds index bytes. The 'unknown' query shows the maximum win for tighter FPR \u2014 the filter rejects most granules outright. The 'known' query still requires reading the matching granule regardless of FPR.",
+    "variants": [
+      {
+        "variant_name": "cmp_events_bf001",
+        "feature_label": "bloom_filter(0.001)",
+        "rows": 1000000,
+        "bytes_compressed": 31838362,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.83,
+        "parts_count": 1,
+        "insert_seconds": 0.98,
+        "query_timings_ms": {
+          "session_known": {
+            "cold_ms": 50.71,
+            "avg_warm_ms": 45.61,
+            "min_warm_ms": 44.11,
+            "max_warm_ms": 47.05
+          },
+          "session_unknown": {
+            "cold_ms": 44.9,
+            "avg_warm_ms": 42.13,
+            "min_warm_ms": 41.59,
+            "max_warm_ms": 42.41
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_bf01",
+        "feature_label": "bloom_filter(0.01)",
+        "rows": 1000000,
+        "bytes_compressed": 31257961,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.88,
+        "parts_count": 1,
+        "insert_seconds": 0.94,
+        "query_timings_ms": {
+          "session_known": {
+            "cold_ms": 48.08,
+            "avg_warm_ms": 47.54,
+            "min_warm_ms": 46.69,
+            "max_warm_ms": 48.77
+          },
+          "session_unknown": {
+            "cold_ms": 41.9,
+            "avg_warm_ms": 40.92,
+            "min_warm_ms": 39.95,
+            "max_warm_ms": 42.19
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_bf05",
+        "feature_label": "bloom_filter(0.05)",
+        "rows": 1000000,
+        "bytes_compressed": 30865483,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.92,
+        "parts_count": 1,
+        "insert_seconds": 0.993,
+        "query_timings_ms": {
+          "session_known": {
+            "cold_ms": 52.09,
+            "avg_warm_ms": 49.58,
+            "min_warm_ms": 48.68,
+            "max_warm_ms": 50.64
+          },
+          "session_unknown": {
+            "cold_ms": 44.47,
+            "avg_warm_ms": 41.39,
+            "min_warm_ms": 40.5,
+            "max_warm_ms": 42.87
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "key": "skip_index_granularity",
+    "title": "Skip-index GRANULARITY tuning",
+    "timestamp": "2026-05-03T19:29:51.318808",
+    "insight": "Finer GRANULARITY skips more granules at the cost of a larger skip-index. The 'unknown' query is where finer wins; on 'known' lookups the matching granule still has to be read either way.",
+    "variants": [
+      {
+        "variant_name": "cmp_events_sg1",
+        "feature_label": "GRANULARITY 1",
+        "rows": 1000000,
+        "bytes_compressed": 31258405,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.88,
+        "parts_count": 1,
+        "insert_seconds": 0.992,
+        "query_timings_ms": {
+          "session_known": {
+            "cold_ms": 47.08,
+            "avg_warm_ms": 46.13,
+            "min_warm_ms": 45.6,
+            "max_warm_ms": 47.05
+          },
+          "session_unknown": {
+            "cold_ms": 44.25,
+            "avg_warm_ms": 43.56,
+            "min_warm_ms": 41.65,
+            "max_warm_ms": 44.99
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_sg4",
+        "feature_label": "GRANULARITY 4",
+        "rows": 1000000,
+        "bytes_compressed": 31257961,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.88,
+        "parts_count": 1,
+        "insert_seconds": 0.963,
+        "query_timings_ms": {
+          "session_known": {
+            "cold_ms": 48.02,
+            "avg_warm_ms": 47.43,
+            "min_warm_ms": 46.18,
+            "max_warm_ms": 48.11
+          },
+          "session_unknown": {
+            "cold_ms": 43.86,
+            "avg_warm_ms": 42.66,
+            "min_warm_ms": 41.61,
+            "max_warm_ms": 44.04
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_sg16",
+        "feature_label": "GRANULARITY 16",
+        "rows": 1000000,
+        "bytes_compressed": 31257229,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.88,
+        "parts_count": 1,
+        "insert_seconds": 1.047,
+        "query_timings_ms": {
+          "session_known": {
+            "cold_ms": 51.46,
+            "avg_warm_ms": 51.92,
+            "min_warm_ms": 50.42,
+            "max_warm_ms": 53.09
+          },
+          "session_unknown": {
+            "cold_ms": 43.88,
+            "avg_warm_ms": 42.45,
+            "min_warm_ms": 41.44,
+            "max_warm_ms": 43.15
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]
