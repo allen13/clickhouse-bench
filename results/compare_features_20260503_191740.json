@@ -1,0 +1,133 @@
+[
+  {
+    "key": "partitioning",
+    "title": "PARTITION BY strategies",
+    "timestamp": "2026-05-03T19:17:31.870718",
+    "insight": "Day-partitioning gives surgical pruning for time-window queries but produces many parts (slower writes if not batched).  Month-partitioning is the most common balance.  user_id % 16 favors per-user queries but kills time-range pruning.  No-partition keeps merges cheap but loses drop-old-data convenience.",
+    "variants": [
+      {
+        "variant_name": "cmp_events_no_part",
+        "feature_label": "No PARTITION BY",
+        "rows": 1000000,
+        "bytes_compressed": 30043107,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 3.0,
+        "parts_count": 1,
+        "insert_seconds": 0.92,
+        "query_timings_ms": {
+          "recent_window": {
+            "cold_ms": 44.73,
+            "avg_warm_ms": 45.09,
+            "min_warm_ms": 44.63,
+            "max_warm_ms": 45.58
+          },
+          "specific_day": {
+            "cold_ms": 46.47,
+            "avg_warm_ms": 44.98,
+            "min_warm_ms": 44.29,
+            "max_warm_ms": 45.7
+          },
+          "user_lookup": {
+            "cold_ms": 40.89,
+            "avg_warm_ms": 40.91,
+            "min_warm_ms": 40.77,
+            "max_warm_ms": 41.1
+          },
+          "parts_count": {
+            "cold_ms": 40.73,
+            "avg_warm_ms": 40.52,
+            "min_warm_ms": 40.01,
+            "max_warm_ms": 40.8
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_part_month",
+        "feature_label": "PARTITION BY toYYYYMM(event_time)",
+        "rows": 1000000,
+        "bytes_compressed": 30394679,
+        "bytes_uncompressed": 90112587,
+        "compression_ratio": 2.96,
+        "parts_count": 13,
+        "insert_seconds": 2.27,
+        "query_timings_ms": {
+          "recent_window": {
+            "cold_ms": 42.0,
+            "avg_warm_ms": 42.94,
+            "min_warm_ms": 41.83,
+            "max_warm_ms": 44.76
+          },
+          "specific_day": {
+            "cold_ms": 43.39,
+            "avg_warm_ms": 43.28,
+            "min_warm_ms": 42.81,
+            "max_warm_ms": 43.79
+          },
+          "user_lookup": {
+            "cold_ms": 44.02,
+            "avg_warm_ms": 42.73,
+            "min_warm_ms": 41.83,
+            "max_warm_ms": 43.32
+          },
+          "parts_count": {
+            "cold_ms": 41.33,
+            "avg_warm_ms": 42.12,
+            "min_warm_ms": 41.45,
+            "max_warm_ms": 42.87
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_part_day",
+        "feature_label": "PARTITION BY toDate(event_time)",
+        "rows": 0,
+        "bytes_compressed": 0,
+        "bytes_uncompressed": 0,
+        "compression_ratio": 0.0,
+        "parts_count": 0,
+        "insert_seconds": 0.0,
+        "query_timings_ms": {},
+        "error": "Received ClickHouse exception, code: 252, server response: Code: 252. DB::Exception: Too many partitions for single INSERT block (more than 100). The limit is controlled by 'max_partitions_per_insert_block' setting. Large number of partitions is a common misconception. It will lead to severe negative performance impact, including slow server startup, slow INSERT queries and slow SELECT queries. Recommended total number of partitions for a table is under 1000..10000. Please note, that partitioning is not intended to speed up SELECT queries (ORDER BY key is sufficient to make range queries fast). Partitions are intended for data manipulation (DROP PARTITION, etc). (TOO_MANY_PARTS) (for url https://iei5urj7xg.us-east-1.aws.clickhouse.cloud:8443)"
+      },
+      {
+        "variant_name": "cmp_events_part_user_bucket",
+        "feature_label": "PARTITION BY user_id % 16",
+        "rows": 1000000,
+        "bytes_compressed": 30049002,
+        "bytes_uncompressed": 90113523,
+        "compression_ratio": 3.0,
+        "parts_count": 16,
+        "insert_seconds": 2.642,
+        "query_timings_ms": {
+          "recent_window": {
+            "cold_ms": 44.0,
+            "avg_warm_ms": 45.29,
+            "min_warm_ms": 43.26,
+            "max_warm_ms": 46.8
+          },
+          "specific_day": {
+            "cold_ms": 47.25,
+            "avg_warm_ms": 47.92,
+            "min_warm_ms": 46.19,
+            "max_warm_ms": 49.95
+          },
+          "user_lookup": {
+            "cold_ms": 42.57,
+            "avg_warm_ms": 42.82,
+            "min_warm_ms": 42.7,
+            "max_warm_ms": 42.94
+          },
+          "parts_count": {
+            "cold_ms": 40.54,
+            "avg_warm_ms": 41.81,
+            "min_warm_ms": 40.5,
+            "max_warm_ms": 42.88
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

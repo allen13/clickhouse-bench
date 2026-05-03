@@ -1,0 +1,60 @@
+[
+  {
+    "key": "lowcardinality",
+    "title": "LowCardinality vs String",
+    "timestamp": "2026-05-03T19:17:09.249539",
+    "insight": "LowCardinality typically halves storage and doubles GROUP BY speed for low-cardinality columns.  Don't use it for high-cardinality columns (>100K distinct values) \u2014 the dictionary overhead dominates.",
+    "variants": [
+      {
+        "variant_name": "cmp_users_string",
+        "feature_label": "country: String",
+        "rows": 100000,
+        "bytes_compressed": 3181700,
+        "bytes_uncompressed": 11098111,
+        "compression_ratio": 3.49,
+        "parts_count": 1,
+        "insert_seconds": 0.357,
+        "query_timings_ms": {
+          "group_by": {
+            "cold_ms": 46.93,
+            "avg_warm_ms": 47.51,
+            "min_warm_ms": 46.63,
+            "max_warm_ms": 48.11
+          },
+          "filter_country": {
+            "cold_ms": 49.04,
+            "avg_warm_ms": 48.03,
+            "min_warm_ms": 47.53,
+            "max_warm_ms": 48.53
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_users_lc",
+        "feature_label": "country: LowCardinality(String)",
+        "rows": 100000,
+        "bytes_compressed": 3085822,
+        "bytes_uncompressed": 10199047,
+        "compression_ratio": 3.31,
+        "parts_count": 1,
+        "insert_seconds": 0.342,
+        "query_timings_ms": {
+          "group_by": {
+            "cold_ms": 45.28,
+            "avg_warm_ms": 46.42,
+            "min_warm_ms": 44.57,
+            "max_warm_ms": 48.43
+          },
+          "filter_country": {
+            "cold_ms": 44.38,
+            "avg_warm_ms": 44.81,
+            "min_warm_ms": 44.48,
+            "max_warm_ms": 45.32
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

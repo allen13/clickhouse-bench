@@ -1,0 +1,131 @@
+[
+  {
+    "key": "engines",
+    "title": "Engine comparison: MergeTree variants",
+    "timestamp": "2026-05-03T19:17:41.407273",
+    "insight": "ReplacingMergeTree and SummingMergeTree shrink storage by collapsing rows on merge.  AggregatingMergeTree pre-computes aggregates so category_revenue runs on already-aggregated state.  Trade-off: less flexible queries on the AMT variant.",
+    "variants": [
+      {
+        "variant_name": "cmp_orders_mt",
+        "feature_label": "MergeTree",
+        "rows": 300000,
+        "bytes_compressed": 4275988,
+        "bytes_uncompressed": 12316539,
+        "compression_ratio": 2.88,
+        "parts_count": 1,
+        "insert_seconds": 0.384,
+        "query_timings_ms": {
+          "count_all": {
+            "cold_ms": 40.7,
+            "avg_warm_ms": 39.24,
+            "min_warm_ms": 38.84,
+            "max_warm_ms": 39.94
+          },
+          "user_lookup": {
+            "cold_ms": 42.3,
+            "avg_warm_ms": 40.64,
+            "min_warm_ms": 39.8,
+            "max_warm_ms": 41.55
+          },
+          "category_revenue": {
+            "cold_ms": 45.53,
+            "avg_warm_ms": 44.37,
+            "min_warm_ms": 43.61,
+            "max_warm_ms": 44.76
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_orders_rmt",
+        "feature_label": "ReplacingMergeTree",
+        "rows": 300000,
+        "bytes_compressed": 4306434,
+        "bytes_uncompressed": 13516539,
+        "compression_ratio": 3.14,
+        "parts_count": 1,
+        "insert_seconds": 0.506,
+        "query_timings_ms": {
+          "count_all": {
+            "cold_ms": 41.34,
+            "avg_warm_ms": 40.55,
+            "min_warm_ms": 40.2,
+            "max_warm_ms": 40.72
+          },
+          "user_lookup": {
+            "cold_ms": 44.36,
+            "avg_warm_ms": 43.32,
+            "min_warm_ms": 43.03,
+            "max_warm_ms": 43.81
+          },
+          "category_revenue": {
+            "cold_ms": 44.48,
+            "avg_warm_ms": 44.79,
+            "min_warm_ms": 43.29,
+            "max_warm_ms": 46.23
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_orders_smt",
+        "feature_label": "SummingMergeTree(total_price, quantity)",
+        "rows": 299866,
+        "bytes_compressed": 1961147,
+        "bytes_uncompressed": 6899582,
+        "compression_ratio": 3.52,
+        "parts_count": 1,
+        "insert_seconds": 0.365,
+        "query_timings_ms": {
+          "count_all": {
+            "cold_ms": 39.05,
+            "avg_warm_ms": 40.3,
+            "min_warm_ms": 40.01,
+            "max_warm_ms": 40.52
+          },
+          "user_lookup": {
+            "cold_ms": 42.43,
+            "avg_warm_ms": 41.77,
+            "min_warm_ms": 40.95,
+            "max_warm_ms": 42.67
+          },
+          "category_revenue": {
+            "cold_ms": 43.55,
+            "avg_warm_ms": 43.0,
+            "min_warm_ms": 42.73,
+            "max_warm_ms": 43.26
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_orders_amt",
+        "feature_label": "AggregatingMergeTree",
+        "rows": 225569,
+        "bytes_compressed": 1993582,
+        "bytes_uncompressed": 6092379,
+        "compression_ratio": 3.06,
+        "parts_count": 1,
+        "insert_seconds": 0.474,
+        "query_timings_ms": {
+          "count_all": {
+            "cold_ms": 39.5,
+            "avg_warm_ms": 38.99,
+            "min_warm_ms": 38.64,
+            "max_warm_ms": 39.64
+          },
+          "user_lookup": {
+            "cold_ms": 42.53,
+            "avg_warm_ms": 42.19,
+            "min_warm_ms": 41.99,
+            "max_warm_ms": 42.37
+          },
+          "category_revenue": {
+            "error": "Received ClickHouse exception, code: 47, server response: Code: 47. DB::Exception: Unknown expression or function identifier `total_price` in scope SELECT category, sum(total_price) FROM cmp_orders_amt GROUP BY category. (UNKNOWN_IDENTIFIER) (for url https://iei5urj7xg.us-east-1.aws.clickhouse.cloud:8443)"
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

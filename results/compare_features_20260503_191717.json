@@ -1,0 +1,135 @@
+[
+  {
+    "key": "codecs",
+    "title": "Codec comparison: storage and query trade-offs",
+    "timestamp": "2026-05-03T19:17:11.786145",
+    "insight": "DoubleDelta + Delta typically beat ZSTD-9 for storage on smooth time-series while keeping query CPU low.  ZSTD-9 wins for entropy-heavy strings.  Gorilla is excellent for floats but has been deprecated in newer versions.",
+    "variants": [
+      {
+        "variant_name": "cmp_metrics_lz4",
+        "feature_label": "LZ4 (default)",
+        "rows": 622200,
+        "bytes_compressed": 5037550,
+        "bytes_uncompressed": 16809356,
+        "compression_ratio": 3.34,
+        "parts_count": 1,
+        "insert_seconds": 0.437,
+        "query_timings_ms": {
+          "range_scan": {
+            "cold_ms": 43.56,
+            "avg_warm_ms": 47.79,
+            "min_warm_ms": 41.9,
+            "max_warm_ms": 57.7
+          },
+          "downsample": {
+            "cold_ms": 49.43,
+            "avg_warm_ms": 52.57,
+            "min_warm_ms": 46.94,
+            "max_warm_ms": 62.61
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_metrics_zstd3",
+        "feature_label": "ZSTD(3) on all columns",
+        "rows": 622200,
+        "bytes_compressed": 4233606,
+        "bytes_uncompressed": 16809356,
+        "compression_ratio": 3.97,
+        "parts_count": 1,
+        "insert_seconds": 0.271,
+        "query_timings_ms": {
+          "range_scan": {
+            "cold_ms": 41.14,
+            "avg_warm_ms": 42.11,
+            "min_warm_ms": 41.18,
+            "max_warm_ms": 42.62
+          },
+          "downsample": {
+            "cold_ms": 50.47,
+            "avg_warm_ms": 49.44,
+            "min_warm_ms": 49.08,
+            "max_warm_ms": 49.71
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_metrics_zstd9",
+        "feature_label": "ZSTD(9) on all columns",
+        "rows": 622200,
+        "bytes_compressed": 4137763,
+        "bytes_uncompressed": 16809356,
+        "compression_ratio": 4.06,
+        "parts_count": 1,
+        "insert_seconds": 0.514,
+        "query_timings_ms": {
+          "range_scan": {
+            "cold_ms": 43.02,
+            "avg_warm_ms": 41.97,
+            "min_warm_ms": 41.89,
+            "max_warm_ms": 42.08
+          },
+          "downsample": {
+            "cold_ms": 49.45,
+            "avg_warm_ms": 49.36,
+            "min_warm_ms": 48.42,
+            "max_warm_ms": 50.21
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_metrics_dd_delta",
+        "feature_label": "DoubleDelta(timestamp) + Delta(value) + LZ4",
+        "rows": 622200,
+        "bytes_compressed": 5298114,
+        "bytes_uncompressed": 16809356,
+        "compression_ratio": 3.17,
+        "parts_count": 1,
+        "insert_seconds": 0.346,
+        "query_timings_ms": {
+          "range_scan": {
+            "cold_ms": 44.01,
+            "avg_warm_ms": 41.73,
+            "min_warm_ms": 41.19,
+            "max_warm_ms": 42.67
+          },
+          "downsample": {
+            "cold_ms": 47.02,
+            "avg_warm_ms": 49.96,
+            "min_warm_ms": 48.88,
+            "max_warm_ms": 51.93
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_metrics_gorilla",
+        "feature_label": "Gorilla(value) + DoubleDelta(timestamp)",
+        "rows": 622200,
+        "bytes_compressed": 6104250,
+        "bytes_uncompressed": 16809356,
+        "compression_ratio": 2.75,
+        "parts_count": 1,
+        "insert_seconds": 0.462,
+        "query_timings_ms": {
+          "range_scan": {
+            "cold_ms": 43.87,
+            "avg_warm_ms": 42.14,
+            "min_warm_ms": 41.95,
+            "max_warm_ms": 42.31
+          },
+          "downsample": {
+            "cold_ms": 48.21,
+            "avg_warm_ms": 48.76,
+            "min_warm_ms": 47.56,
+            "max_warm_ms": 49.52
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

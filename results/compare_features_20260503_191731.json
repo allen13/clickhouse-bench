@@ -1,0 +1,134 @@
+[
+  {
+    "key": "skip_indexes",
+    "title": "Skip (data-skipping) indexes on non-PK columns",
+    "timestamp": "2026-05-03T19:17:23.833039",
+    "insight": "Bloom dramatically helps high-cardinality equality (session_id). Set helps when filter values fit in the set size. Minmax shines for time-window queries on tables not ordered by time.",
+    "variants": [
+      {
+        "variant_name": "cmp_events_no_idx",
+        "feature_label": "No skip index",
+        "rows": 1000000,
+        "bytes_compressed": 30043107,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 3.0,
+        "parts_count": 1,
+        "insert_seconds": 0.906,
+        "query_timings_ms": {
+          "session_lookup": {
+            "cold_ms": 63.24,
+            "avg_warm_ms": 49.32,
+            "min_warm_ms": 48.87,
+            "max_warm_ms": 50.06
+          },
+          "type_filter": {
+            "cold_ms": 45.48,
+            "avg_warm_ms": 45.42,
+            "min_warm_ms": 43.27,
+            "max_warm_ms": 46.81
+          },
+          "time_window": {
+            "cold_ms": 45.39,
+            "avg_warm_ms": 44.82,
+            "min_warm_ms": 44.29,
+            "max_warm_ms": 45.65
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_bloom",
+        "feature_label": "bloom_filter on session_id",
+        "rows": 1000000,
+        "bytes_compressed": 31257961,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 2.88,
+        "parts_count": 1,
+        "insert_seconds": 0.938,
+        "query_timings_ms": {
+          "session_lookup": {
+            "cold_ms": 50.22,
+            "avg_warm_ms": 46.89,
+            "min_warm_ms": 46.02,
+            "max_warm_ms": 47.77
+          },
+          "type_filter": {
+            "cold_ms": 43.61,
+            "avg_warm_ms": 44.19,
+            "min_warm_ms": 43.67,
+            "max_warm_ms": 44.78
+          },
+          "time_window": {
+            "cold_ms": 45.18,
+            "avg_warm_ms": 45.95,
+            "min_warm_ms": 45.06,
+            "max_warm_ms": 47.47
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_set_idx",
+        "feature_label": "set(100) on event_type",
+        "rows": 1000000,
+        "bytes_compressed": 30043801,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 3.0,
+        "parts_count": 1,
+        "insert_seconds": 1.377,
+        "query_timings_ms": {
+          "session_lookup": {
+            "cold_ms": 62.44,
+            "avg_warm_ms": 48.95,
+            "min_warm_ms": 48.66,
+            "max_warm_ms": 49.49
+          },
+          "type_filter": {
+            "cold_ms": 44.37,
+            "avg_warm_ms": 45.0,
+            "min_warm_ms": 44.21,
+            "max_warm_ms": 46.46
+          },
+          "time_window": {
+            "cold_ms": 45.4,
+            "avg_warm_ms": 46.18,
+            "min_warm_ms": 45.24,
+            "max_warm_ms": 46.96
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_minmax_idx",
+        "feature_label": "minmax on event_time",
+        "rows": 1000000,
+        "bytes_compressed": 30043467,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 3.0,
+        "parts_count": 1,
+        "insert_seconds": 0.925,
+        "query_timings_ms": {
+          "session_lookup": {
+            "cold_ms": 61.81,
+            "avg_warm_ms": 49.92,
+            "min_warm_ms": 49.24,
+            "max_warm_ms": 50.54
+          },
+          "type_filter": {
+            "cold_ms": 45.38,
+            "avg_warm_ms": 45.96,
+            "min_warm_ms": 44.03,
+            "max_warm_ms": 49.74
+          },
+          "time_window": {
+            "cold_ms": 48.96,
+            "avg_warm_ms": 46.73,
+            "min_warm_ms": 45.2,
+            "max_warm_ms": 48.22
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

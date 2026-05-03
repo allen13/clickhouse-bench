@@ -1,0 +1,60 @@
+[
+  {
+    "key": "projections",
+    "title": "Projections (table-internal materialized aggregations)",
+    "timestamp": "2026-05-03T19:17:17.681162",
+    "insight": "The projected variant should resolve the daily_event_count query directly from pre-aggregated parts \u2014 typically 10-100x faster than scanning the base table.  Storage cost: a small fraction of the base table.  Trade-off: writes are slower (every insert updates the projection).",
+    "variants": [
+      {
+        "variant_name": "cmp_events_no_proj",
+        "feature_label": "No projection",
+        "rows": 1000000,
+        "bytes_compressed": 30043107,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 3.0,
+        "parts_count": 1,
+        "insert_seconds": 0.89,
+        "query_timings_ms": {
+          "daily_event_count": {
+            "cold_ms": 104.02,
+            "avg_warm_ms": 63.81,
+            "min_warm_ms": 62.28,
+            "max_warm_ms": 65.95
+          },
+          "type_distribution": {
+            "cold_ms": 45.77,
+            "avg_warm_ms": 45.82,
+            "min_warm_ms": 45.22,
+            "max_warm_ms": 46.41
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_with_proj",
+        "feature_label": "With aggregating projection",
+        "rows": 1000000,
+        "bytes_compressed": 30047439,
+        "bytes_uncompressed": 90112899,
+        "compression_ratio": 3.0,
+        "parts_count": 1,
+        "insert_seconds": 1.023,
+        "query_timings_ms": {
+          "daily_event_count": {
+            "cold_ms": 46.91,
+            "avg_warm_ms": 48.22,
+            "min_warm_ms": 47.39,
+            "max_warm_ms": 48.86
+          },
+          "type_distribution": {
+            "cold_ms": 42.02,
+            "avg_warm_ms": 44.41,
+            "min_warm_ms": 42.61,
+            "max_warm_ms": 47.57
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]
