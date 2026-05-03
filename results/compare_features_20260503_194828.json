@@ -1,0 +1,60 @@
+[
+  {
+    "key": "materialized_views",
+    "title": "Materialized views: streaming pre-aggregation",
+    "timestamp": "2026-05-03T19:48:24.642743",
+    "insight": "Querying the MV target should be near-instant regardless of base table size, while the raw query scales with the base table.  Cost: every insert into the source table runs the MV's GROUP BY.",
+    "variants": [
+      {
+        "variant_name": "cmp_events_mv_source",
+        "feature_label": "Raw events (source for MV)",
+        "rows": 10000000,
+        "bytes_compressed": 77897139,
+        "bytes_uncompressed": 210126984,
+        "compression_ratio": 2.7,
+        "parts_count": 10,
+        "insert_seconds": 1.706,
+        "query_timings_ms": {
+          "raw_daily_count": {
+            "cold_ms": 172.45,
+            "avg_warm_ms": 196.66,
+            "min_warm_ms": 192.64,
+            "max_warm_ms": 201.66
+          },
+          "mv_daily_count": {
+            "cold_ms": 40.92,
+            "avg_warm_ms": 40.96,
+            "min_warm_ms": 40.18,
+            "max_warm_ms": 42.19
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_mv_target",
+        "feature_label": "MV target: daily event counts",
+        "rows": 0,
+        "bytes_compressed": 0,
+        "bytes_uncompressed": 0,
+        "compression_ratio": 0.0,
+        "parts_count": 0,
+        "insert_seconds": 0.0,
+        "query_timings_ms": {
+          "raw_daily_count": {
+            "cold_ms": 170.42,
+            "avg_warm_ms": 167.12,
+            "min_warm_ms": 161.2,
+            "max_warm_ms": 170.31
+          },
+          "mv_daily_count": {
+            "cold_ms": 40.06,
+            "avg_warm_ms": 41.18,
+            "min_warm_ms": 39.9,
+            "max_warm_ms": 42.14
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "key": "ordering",
+    "title": "ORDER BY key comparison (primary index)",
+    "timestamp": "2026-05-03T19:48:02.914616",
+    "insight": "user_first wins by_user; time_first wins by_time; type_first wins by_type. The first column of ORDER BY is the most selective \u2014 pick it based on your highest-frequency query shape.  Compound ORDER BY also affects column compression: data sorts more compressibly under one key than another.",
+    "variants": [
+      {
+        "variant_name": "cmp_events_user_first",
+        "feature_label": "ORDER BY (user_id, event_time)",
+        "rows": 10000000,
+        "bytes_compressed": 301712060,
+        "bytes_uncompressed": 901134655,
+        "compression_ratio": 2.99,
+        "parts_count": 10,
+        "insert_seconds": 4.893,
+        "query_timings_ms": {
+          "by_user": {
+            "cold_ms": 41.94,
+            "avg_warm_ms": 41.4,
+            "min_warm_ms": 41.12,
+            "max_warm_ms": 41.65
+          },
+          "by_time": {
+            "cold_ms": 63.62,
+            "avg_warm_ms": 64.51,
+            "min_warm_ms": 63.09,
+            "max_warm_ms": 66.94
+          },
+          "by_type": {
+            "cold_ms": 60.88,
+            "avg_warm_ms": 60.45,
+            "min_warm_ms": 60.17,
+            "max_warm_ms": 60.98
+          },
+          "user_and_time": {
+            "cold_ms": 41.09,
+            "avg_warm_ms": 41.48,
+            "min_warm_ms": 40.91,
+            "max_warm_ms": 42.16
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_time_first",
+        "feature_label": "ORDER BY (event_time, user_id)",
+        "rows": 10000000,
+        "bytes_compressed": 324454281,
+        "bytes_uncompressed": 901134655,
+        "compression_ratio": 2.78,
+        "parts_count": 10,
+        "insert_seconds": 5.93,
+        "query_timings_ms": {
+          "by_user": {
+            "cold_ms": 84.19,
+            "avg_warm_ms": 43.07,
+            "min_warm_ms": 42.44,
+            "max_warm_ms": 43.63
+          },
+          "by_time": {
+            "cold_ms": 40.52,
+            "avg_warm_ms": 40.85,
+            "min_warm_ms": 40.46,
+            "max_warm_ms": 41.16
+          },
+          "by_type": {
+            "cold_ms": 61.42,
+            "avg_warm_ms": 61.44,
+            "min_warm_ms": 61.07,
+            "max_warm_ms": 61.71
+          },
+          "user_and_time": {
+            "cold_ms": 45.71,
+            "avg_warm_ms": 45.76,
+            "min_warm_ms": 45.13,
+            "max_warm_ms": 46.28
+          }
+        },
+        "error": null
+      },
+      {
+        "variant_name": "cmp_events_type_first",
+        "feature_label": "ORDER BY (event_type, event_time, user_id)",
+        "rows": 10000000,
+        "bytes_compressed": 323434662,
+        "bytes_uncompressed": 901058230,
+        "compression_ratio": 2.79,
+        "parts_count": 10,
+        "insert_seconds": 7.232,
+        "query_timings_ms": {
+          "by_user": {
+            "cold_ms": 84.14,
+            "avg_warm_ms": 43.43,
+            "min_warm_ms": 42.78,
+            "max_warm_ms": 44.29
+          },
+          "by_time": {
+            "cold_ms": 45.53,
+            "avg_warm_ms": 46.42,
+            "min_warm_ms": 45.88,
+            "max_warm_ms": 47.08
+          },
+          "by_type": {
+            "cold_ms": 42.17,
+            "avg_warm_ms": 42.23,
+            "min_warm_ms": 41.51,
+            "max_warm_ms": 42.59
+          },
+          "user_and_time": {
+            "cold_ms": 49.25,
+            "avg_warm_ms": 49.14,
+            "min_warm_ms": 47.88,
+            "max_warm_ms": 49.79
+          }
+        },
+        "error": null
+      }
+    ]
+  }
+]
