@@ -1,0 +1,353 @@
+{
+  "experiment_key": "e1_parallel_replicas_curve_1000000rows",
+  "timestamp": "20260503_193216",
+  "title": "Parallel replicas scaling curve",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-9ri6grr-0",
+    "uptime_s": 1155
+  },
+  "events_rows": 1000000,
+  "settings": {
+    "warm_runs_per_config": 5
+  },
+  "serial": {
+    "settings": {
+      "enable_parallel_replicas": 0
+    },
+    "runs": [
+      {
+        "query_id": "e1-serial-0-f88f40da1edd",
+        "wall_ms": 92.82,
+        "rows": 3294,
+        "iteration": 0,
+        "server": {
+          "query_id": "e1-serial-0-f88f40da1edd",
+          "query_duration_ms": 50,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95362027,
+          "peak_threads_usage": 27,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-serial-1-7089f3ffb6fd",
+        "wall_ms": 92.66,
+        "rows": 3294,
+        "iteration": 1,
+        "server": {
+          "query_id": "e1-serial-1-7089f3ffb6fd",
+          "query_duration_ms": 51,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95362171,
+          "peak_threads_usage": 27,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-serial-2-5497aef81408",
+        "wall_ms": 92.07,
+        "rows": 3294,
+        "iteration": 2,
+        "server": {
+          "query_id": "e1-serial-2-5497aef81408",
+          "query_duration_ms": 50,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95362379,
+          "peak_threads_usage": 24,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-serial-3-fc165cccf259",
+        "wall_ms": 95.18,
+        "rows": 3294,
+        "iteration": 3,
+        "server": {
+          "query_id": "e1-serial-3-fc165cccf259",
+          "query_duration_ms": 53,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95362443,
+          "peak_threads_usage": 26,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-serial-4-3d14614ddb59",
+        "wall_ms": 89.46,
+        "rows": 3294,
+        "iteration": 4,
+        "server": {
+          "query_id": "e1-serial-4-3d14614ddb59",
+          "query_duration_ms": 45,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 95362475,
+          "peak_threads_usage": 25,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-serial-5-93c76d8011ea",
+        "wall_ms": 89.84,
+        "rows": 3294,
+        "iteration": 5,
+        "server": {
+          "query_id": "e1-serial-5-93c76d8011ea",
+          "query_duration_ms": 48,
+          "read_rows": 1000000,
+          "read_bytes": 13004260,
+          "memory_usage": 90644188,
+          "peak_threads_usage": 25,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 91.84
+  },
+  "parallel_2": {
+    "settings": {
+      "enable_parallel_replicas": 1,
+      "max_parallel_replicas": 2,
+      "cluster_for_parallel_replicas": "default",
+      "parallel_replicas_min_number_of_rows_per_replica": 100000
+    },
+    "runs": [
+      {
+        "query_id": "e1-parallel_2-0-0238120da8e7",
+        "wall_ms": 151.29,
+        "rows": 3294,
+        "iteration": 0,
+        "server": {
+          "query_id": "e1-parallel_2-0-0238120da8e7",
+          "query_duration_ms": 75,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 60455606,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_2-1-554658e4d263",
+        "wall_ms": 145.32,
+        "rows": 3294,
+        "iteration": 1,
+        "server": {
+          "query_id": "e1-parallel_2-1-554658e4d263",
+          "query_duration_ms": 104,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 64190100,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_2-2-73f3bde75c5a",
+        "wall_ms": 118.68,
+        "rows": 3294,
+        "iteration": 2,
+        "server": {
+          "query_id": "e1-parallel_2-2-73f3bde75c5a",
+          "query_duration_ms": 75,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 49493194,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_2-3-2a159bad517c",
+        "wall_ms": 115.71,
+        "rows": 3294,
+        "iteration": 3,
+        "server": {
+          "query_id": "e1-parallel_2-3-2a159bad517c",
+          "query_duration_ms": 74,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 48730290,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_2-4-8f6f91b519ad",
+        "wall_ms": 116.57,
+        "rows": 3294,
+        "iteration": 4,
+        "server": {
+          "query_id": "e1-parallel_2-4-8f6f91b519ad",
+          "query_duration_ms": 74,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 52727160,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_2-5-e57bd3323f1d",
+        "wall_ms": 152.34,
+        "rows": 3294,
+        "iteration": 5,
+        "server": {
+          "query_id": "e1-parallel_2-5-e57bd3323f1d",
+          "query_duration_ms": 107,
+          "read_rows": 1000000,
+          "read_bytes": 13004828,
+          "memory_usage": 60805145,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 129.72
+  },
+  "parallel_3": {
+    "settings": {
+      "enable_parallel_replicas": 1,
+      "max_parallel_replicas": 3,
+      "cluster_for_parallel_replicas": "default",
+      "parallel_replicas_min_number_of_rows_per_replica": 100000
+    },
+    "runs": [
+      {
+        "query_id": "e1-parallel_3-0-eb799d0adc4c",
+        "wall_ms": 123.15,
+        "rows": 3294,
+        "iteration": 0,
+        "server": {
+          "query_id": "e1-parallel_3-0-eb799d0adc4c",
+          "query_duration_ms": 81,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 67846512,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_3-1-13bcf917c957",
+        "wall_ms": 118.06,
+        "rows": 3294,
+        "iteration": 1,
+        "server": {
+          "query_id": "e1-parallel_3-1-13bcf917c957",
+          "query_duration_ms": 76,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 65043734,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_3-2-aeac2fb0efe9",
+        "wall_ms": 124.27,
+        "rows": 3294,
+        "iteration": 2,
+        "server": {
+          "query_id": "e1-parallel_3-2-aeac2fb0efe9",
+          "query_duration_ms": 82,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 56295126,
+          "peak_threads_usage": 5,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_3-3-8f6d429035fd",
+        "wall_ms": 121.14,
+        "rows": 3294,
+        "iteration": 3,
+        "server": {
+          "query_id": "e1-parallel_3-3-8f6d429035fd",
+          "query_duration_ms": 78,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 56308430,
+          "peak_threads_usage": 5,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_3-4-23cb81bc164d",
+        "wall_ms": 125.88,
+        "rows": 3294,
+        "iteration": 4,
+        "server": {
+          "query_id": "e1-parallel_3-4-23cb81bc164d",
+          "query_duration_ms": 82,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 55544517,
+          "peak_threads_usage": 5,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      },
+      {
+        "query_id": "e1-parallel_3-5-68eceaf6484a",
+        "wall_ms": 126.22,
+        "rows": 3294,
+        "iteration": 5,
+        "server": {
+          "query_id": "e1-parallel_3-5-68eceaf6484a",
+          "query_duration_ms": 85,
+          "read_rows": 1000000,
+          "read_bytes": 13004686,
+          "memory_usage": 57969442,
+          "peak_threads_usage": 7,
+          "query_cache_usage": "None",
+          "result_rows": 3294,
+          "exception": ""
+        }
+      }
+    ],
+    "warm_avg_ms": 123.11
+  },
+  "speedup_2x": 0.71,
+  "speedup_3x": 0.75
+}

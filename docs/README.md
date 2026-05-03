@@ -34,6 +34,7 @@ Read this first — the rest of the lessons assume the vocabulary it establishes
 | 11 | [parallel-replicas.md](parallel-replicas.md) | Medium | Multi-replica read parallelism on ClickHouse Cloud |
 | 12 | [cloud-architecture.md](cloud-architecture.md) | Context | `SharedMergeTree`, compute/storage separation, idle scaling |
 | 13 | [observability.md](observability.md) | Toolbelt | `EXPLAIN PIPELINE/INDEXES/ESTIMATE`, `system.query_log`, `system.parts` |
+| 14 | [sharding-and-distributed.md](sharding-and-distributed.md) | Cloud context | `SharedMergeTree` vs OSS sharding; parallel-replicas compatibility matrix from Phase E measurements |
 
 ## How these docs were built
 

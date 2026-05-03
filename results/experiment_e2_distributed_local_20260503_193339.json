@@ -1,0 +1,110 @@
+{
+  "experiment_key": "e2_distributed_local",
+  "timestamp": "20260503_193339",
+  "title": "Distributed table across local shards (educational)",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-fm1f6ej-0",
+    "uptime_s": 1232
+  },
+  "shards": 4,
+  "base_unsharded": {
+    "warm_avg_ms": 45.59,
+    "runs": [
+      {
+        "query_id": "exp-d8289caa5798",
+        "wall_ms": 45.6,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-10a463c535b8",
+        "wall_ms": 44.51,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-7fc7dd8a82ef",
+        "wall_ms": 45.37,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-773d52efc3d5",
+        "wall_ms": 44.68,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-6b90bb262328",
+        "wall_ms": 46.82,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-e84f0ad6b1f9",
+        "wall_ms": 46.55,
+        "rows": 9
+      }
+    ]
+  },
+  "merge_fanout": {
+    "warm_avg_ms": 47.58,
+    "runs": [
+      {
+        "query_id": "exp-583f670f6a64",
+        "wall_ms": 47.48,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-ee09533ba22e",
+        "wall_ms": 47.61,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-cd64325c421e",
+        "wall_ms": 47.8,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-d1954fbd24e9",
+        "wall_ms": 47.67,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-74eb28505238",
+        "wall_ms": 47.52,
+        "rows": 9
+      },
+      {
+        "query_id": "exp-cecde5afd202",
+        "wall_ms": 47.3,
+        "rows": 9
+      }
+    ]
+  },
+  "storage": [
+    {
+      "table": "events",
+      "rows": 1000000,
+      "size": "32.14 MiB"
+    },
+    {
+      "table": "exp_events_shard_0",
+      "rows": 250143,
+      "size": "7.41 MiB"
+    },
+    {
+      "table": "exp_events_shard_1",
+      "rows": 250664,
+      "size": "7.43 MiB"
+    },
+    {
+      "table": "exp_events_shard_2",
+      "rows": 249500,
+      "size": "7.38 MiB"
+    },
+    {
+      "table": "exp_events_shard_3",
+      "rows": 249693,
+      "size": "7.39 MiB"
+    }
+  ],
+  "base_to_merge_ratio": 0.96
+}
