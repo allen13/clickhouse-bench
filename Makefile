@@ -5,13 +5,13 @@
 # remember the command sequences.
 #
 # Quick reference:
-#   make paper             rebuild paper.pdf from paper.tex
+#   make paper             rebuild $(PAPER).pdf from $(PAPER).tex
 #   make paper-clean       remove LaTeX intermediates
 #   make aggregate         regenerate results/aggregate.md from JSONs
 #   make smoke             quick connection test against ClickHouse Cloud
 #   make help              this listing
 
-PAPER     := paper
+PAPER     := clickhouse-shape-matching-brief
 LATEX     := xelatex
 LATEX_OPTS := -interaction=nonstopmode -halt-on-error
 
@@ -20,7 +20,7 @@ help:
 	@echo "clickhouse-bench targets:"
 	@echo ""
 	@echo "  -- Documentation --"
-	@echo "  paper           rebuild paper.pdf from paper.tex (xelatex, two passes)"
+	@echo "  paper           rebuild clickhouse-shape-matching-brief.pdf from .tex (xelatex, two passes)"
 	@echo "  paper-clean     remove LaTeX intermediates (.aux, .log, .out, …)"
 	@echo "  aggregate       regenerate results/aggregate.md from results/*.json"
 	@echo ""
@@ -55,7 +55,7 @@ paper-clean:
 	@rm -f $(PAPER).aux $(PAPER).log $(PAPER).out $(PAPER).toc \
 	       $(PAPER).synctex.gz $(PAPER).fls $(PAPER).fdb_latexmk \
 	       $(PAPER).bbl $(PAPER).blg
-	@echo "removed LaTeX intermediates (paper.pdf preserved)"
+	@echo "removed LaTeX intermediates ($(PAPER).pdf preserved)"
 
 .PHONY: aggregate
 aggregate:

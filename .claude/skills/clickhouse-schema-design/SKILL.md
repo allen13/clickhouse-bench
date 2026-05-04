@@ -1,11 +1,11 @@
 ---
 name: clickhouse-schema-design
-description: Design a ClickHouse `CREATE TABLE` statement from the data's shape and query pattern. Use when the user asks "how should I model this in ClickHouse", proposes a schema for review, describes a workload that needs a table, or wants to translate a Postgres/MySQL DDL into a ClickHouse-shaped one. Produces a DDL plus per-decision rationale citing best-practice rules, embedded official documentation, and the project's measured numbers in `paper.pdf`.
+description: Design a ClickHouse `CREATE TABLE` statement from the data's shape and query pattern. Use when the user asks "how should I model this in ClickHouse", proposes a schema for review, describes a workload that needs a table, or wants to translate a Postgres/MySQL DDL into a ClickHouse-shaped one. Produces a DDL plus per-decision rationale citing best-practice rules, embedded official documentation, and the project's measured numbers in `clickhouse-shape-matching-brief.pdf`.
 ---
 
 # ClickHouse schema design from data shape
 
-The recurring lesson from the project's own `paper.pdf` is that **ClickHouse rewards matching the tool to the data's shape**. This skill turns that into a structured design pass.
+The recurring lesson from the project's own `clickhouse-shape-matching-brief.pdf` is that **ClickHouse rewards matching the tool to the data's shape**. This skill turns that into a structured design pass.
 
 > Output target: a single `CREATE TABLE` statement plus a numbered rationale, one bullet per decision, each citing the rule and the measurement that supports it. Do not produce vague advice — every choice must be defended.
 
@@ -46,13 +46,13 @@ Before any DDL, write down (in your response) what shape of data this is:
 - **Pre-aggregation target for an MV?** Default engine: `AggregatingMergeTree`.
 - **Soft-delete pattern?** Records get cancelled, not deleted. Default engine: `CollapsingMergeTree(sign)` or `VersionedCollapsingMergeTree(sign, version)` if writes can arrive out of order.
 - **Time-series with retention rules?** `MergeTree` with `PARTITION BY toYYYYMM(...)` and `TTL`.
-- **Lookup table joined many times to facts?** Probably not a table at all — a `Dictionary` (see the joins-and-dictionaries lesson; measured `-37%` memory in `paper.pdf` §5).
+- **Lookup table joined many times to facts?** Probably not a table at all — a `Dictionary` (see the joins-and-dictionaries lesson; measured `-37%` memory in `clickhouse-shape-matching-brief.pdf` §5).
 
 If the user hasn't said which one this is, that's the first question to ask.
 
 ### Step 2 — Plan the `ORDER BY` (because it's immutable)
 
-`ORDER BY` cannot be changed after table creation. Picking it wrong means a full data migration to fix. From the `paper.pdf` §2 measurement: at 10M rows each variant of the same table won the query that aligned with its leading column, with 7% storage variance.
+`ORDER BY` cannot be changed after table creation. Picking it wrong means a full data migration to fix. From the `clickhouse-shape-matching-brief.pdf` §2 measurement: at 10M rows each variant of the same table won the query that aligned with its leading column, with 7% storage variance.
 
 Ask the user (if not already known):
 1. The top 5–10 query shapes that will hit this table — `WHERE` columns specifically.
@@ -74,8 +74,8 @@ For each column, write down two things: **the value type** and **the value distr
 | If the values are…                         | Type                                  | Codec hint                     |
 |---|---|---|
 | Sequential IDs (UInt32/64 sized)           | `UInt32`/`UInt64`                     | `Delta` if monotonic; else default LZ4 |
-| UUIDs / hashes                             | `UUID`                                | LZ4 (default). Specialised codecs hurt — `paper.pdf` §4 measured `0.9×` (worse than nothing) under `DoubleDelta` |
-| Timestamps                                 | `DateTime` (or `Date` for day-grain)  | `DoubleDelta, LZ4` for monotone time-series; `paper.pdf` §4 measured **850×** compression on monotonic UInt64 |
+| UUIDs / hashes                             | `UUID`                                | LZ4 (default). Specialised codecs hurt — `clickhouse-shape-matching-brief.pdf` §4 measured `0.9×` (worse than nothing) under `DoubleDelta` |
+| Timestamps                                 | `DateTime` (or `Date` for day-grain)  | `DoubleDelta, LZ4` for monotone time-series; `clickhouse-shape-matching-brief.pdf` §4 measured **850×** compression on monotonic UInt64 |
 | Floats with slow drift (gauges)            | `Float64`                             | `Gorilla`/`ALP` if available; benchmark — see `docs/codecs-compression.md` |
 | Status, country, event-type, etc. (<10K distinct) | `LowCardinality(String)`       | LZ4 (default) |
 | Free-text                                  | `String`                              | `ZSTD(3)` if size matters     |
@@ -83,7 +83,7 @@ For each column, write down two things: **the value type** and **the value distr
 | Booleans                                   | `Bool`                                | LZ4 |
 | Counts in narrow range (HTTP codes, ages)  | `UInt8`/`UInt16`                      | `T64, LZ4` for narrow integers |
 
-Per-rule citations: `schema-types-native-types`, `schema-types-minimize-bitwidth`, `schema-types-lowcardinality`. From `paper.pdf` §3: native types use **32% less raw I/O** than `String`-for-everything.
+Per-rule citations: `schema-types-native-types`, `schema-types-minimize-bitwidth`, `schema-types-lowcardinality`. From `clickhouse-shape-matching-brief.pdf` §3: native types use **32% less raw I/O** than `String`-for-everything.
 
 **Avoid `Nullable(...)`** unless the *absence* of a value is itself information (e.g., `deleted_at` where NULL = "not deleted"). Use `DEFAULT` values for "unknown" — empty string, 0, `now()`. Per `schema-types-avoid-nullable`.
 
@@ -96,7 +96,7 @@ Use partitioning when:
 - You want `TO VOLUME 'cold'` to migrate aged data to cheaper storage.
 - You'll archive partitions to a sibling table.
 
-Cardinality cap: **100–1,000 distinct partitions total**. Day-partitioning over multi-year data triggers `TOO_MANY_PARTS` on the very first INSERT — see `paper.pdf`'s bonus section, where the server emits its own canonical error message. Per `schema-partition-low-cardinality`.
+Cardinality cap: **100–1,000 distinct partitions total**. Day-partitioning over multi-year data triggers `TOO_MANY_PARTS` on the very first INSERT — see `clickhouse-shape-matching-brief.pdf`'s bonus section, where the server emits its own canonical error message. Per `schema-partition-low-cardinality`.
 
 | If the data lifecycle is…                  | Partition by             |
 |---|---|
@@ -109,7 +109,7 @@ Cardinality cap: **100–1,000 distinct partitions total**. Day-partitioning ove
 
 Default: **none**. Add only when a measured query is the bottleneck.
 
-- **Materialised view** when the same aggregation is asked repeatedly (dashboard refresh). Build a target `AggregatingMergeTree` + an MV trigger. From `paper.pdf` §5: **4.8× faster** at 10M rows for the dashboard query. Use `*State` aggregate functions in the MV definition and `*Merge` in the read query.
+- **Materialised view** when the same aggregation is asked repeatedly (dashboard refresh). Build a target `AggregatingMergeTree` + an MV trigger. From `clickhouse-shape-matching-brief.pdf` §5: **4.8× faster** at 10M rows for the dashboard query. Use `*State` aggregate functions in the MV definition and `*Merge` in the read query.
 - **Projection** when you want a second sort order or pre-aggregation co-located with the base table, with atomic consistency. Cleaner DDL than an MV but doesn't compose across tables.
 - **Skip index** (`bloom_filter`, `set`, `minmax`) when a query filters on a non-`ORDER BY` column AND the matching values cluster with the primary key. Add only after `EXPLAIN ESTIMATE` confirms the primary index alone can't help.
 
@@ -143,7 +143,7 @@ ORDER BY (...)
 
 ## Rationale
 
-1. **Engine: `<engine>`** — because <shape>. Per `<rule>`. Measured: <number from paper.pdf if applicable>.
+1. **Engine: `<engine>`** — because <shape>. Per `<rule>`. Measured: <number from clickhouse-shape-matching-brief.pdf if applicable>.
 2. **`ORDER BY (...)`** — because <query shape>. Per `schema-pk-cardinality-order`.
 3. **`<col1>` `<type>` `CODEC(...)`** — because the values are <shape: constant / monotonic / random / low-cardinality / etc.>. Per `<rule>`.
 4. ... (one bullet per non-obvious choice; skip the obvious ones)
@@ -202,9 +202,9 @@ TTL started_at + INTERVAL 18 MONTH DELETE;
 **Rationale:**
 1. **`MergeTree`** — append-only event log; calls don't get updated.
 2. **`ORDER BY (customer_id, started_at, call_id)`** — top query is "calls for customer X over a date range", so `customer_id` leads. `started_at` second to enable date-range pruning within a customer. `call_id` last for uniqueness.
-3. **`customer_id UInt64`** instead of `String` — 32% less raw I/O on every scan (`paper.pdf` §3).
+3. **`customer_id UInt64`** instead of `String` — 32% less raw I/O on every scan (`clickhouse-shape-matching-brief.pdf` §3).
 4. **`sentiment Int8`** — score range -100..+100 fits easily; `Int8` is 8× smaller than `Int64`. Per `schema-types-minimize-bitwidth`.
-5. **`started_at CODEC(DoubleDelta, LZ4)`** — monotonically-increasing timestamps; `paper.pdf` §4 measured 850× compression on monotonic UInt64. Same family wins for DateTime.
+5. **`started_at CODEC(DoubleDelta, LZ4)`** — monotonically-increasing timestamps; `clickhouse-shape-matching-brief.pdf` §4 measured 850× compression on monotonic UInt64. Same family wins for DateTime.
 6. **`duration_s CODEC(T64, LZ4)`** — narrow integer; T64 strips zero high bytes.
 7. **`transcript CODEC(ZSTD(3))`** — free text compresses well under ZSTD; level 3 is the sweet spot per docs.
 8. **`PARTITION BY toYYYYMM(started_at)`** — 18-month retention × monthly = 18 partitions, well within the 100–1,000 cap. Lets you `DROP PARTITION '202401'` for the rolling-window cleanup.
@@ -275,7 +275,7 @@ Otherwise, don't.
   - `clickhouse-best-practices/` — 33 prioritised rules (rules/ subdirectory has one .md per rule; cite by name).
   - `clickhouse-architecture-advisor/` — 5 decision frameworks + worked examples for finserv / observability / SIEM workloads.
   - `PROVENANCE.md` — upstream commit, capture date, refresh instructions.
-- `paper.pdf` — measured numbers cited above (`§3` types, `§4` codecs/shape, `§5` MV, `§6` dictionaries, `§7` cache, `§8` mutations).
+- `clickhouse-shape-matching-brief.pdf` — measured numbers cited above (`§3` types, `§4` codecs/shape, `§5` MV, `§6` dictionaries, `§7` cache, `§8` mutations).
 - `docs/priority-list.md` — the ranked feature playbook.
 - `docs/merge-tree.md`, `docs/primary-key.md`, `docs/data-types.md`, `docs/codecs-compression.md`, `docs/partitioning-and-ttl.md` — the per-feature deep dives.
 - `clickhouse:clickhouse-best-practices` skill (installed) — the 28 rules cited inline.

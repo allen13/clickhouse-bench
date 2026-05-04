@@ -79,7 +79,7 @@ def main() -> None:
 
     # FINAL incompatibility — try a query that uses FINAL with parallel replicas.
     # We expect it to either error or silently fall back to serial; either way
-    # we capture the EXPLAIN PIPELINE output so paper.md can quote it.
+    # we capture the EXPLAIN PIPELINE output so clickhouse-shape-matching-brief.tex can quote it.
     try:
         final_explain = client.query(
             "EXPLAIN PIPELINE SELECT count() FROM events FINAL WHERE event_type = 'click'",

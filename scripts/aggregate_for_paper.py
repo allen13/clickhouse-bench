@@ -7,7 +7,7 @@ Reads:
 - results/experiment_*.json — Phase C / D / E custom experiments
 
 Writes ``results/aggregate.md`` plus a ``results/cost.md`` with the dollar
-translation. Both are intermediate inputs for paper.md; do not commit them
+translation. Both are intermediate inputs for clickhouse-shape-matching-brief.tex; do not commit them
 as the paper itself.
 
 Cost model (very rough, marked approximate in the paper):
@@ -29,7 +29,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RESULTS = REPO_ROOT / "results"
 
-# Pricing snapshot (Cloud pricing page, captured date noted in paper.md).
+# Pricing snapshot (Cloud pricing page, captured date noted in clickhouse-shape-matching-brief.tex).
 # Numbers are USD; treat all dollar figures as ±20% range estimates.
 COMPUTE_PER_REPLICA_HR = {
     "development": 0.2178,

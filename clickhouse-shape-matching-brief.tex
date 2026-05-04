@@ -138,9 +138,9 @@
 % --- Headline / framing ----------------------------------------------------
 \noindent
 \textbf{\color{accentblue}The headline.}
-We benchmarked a 19-million-row analytics workload on a 3-replica AWS
-ClickHouse Cloud service. Across nine experiments the same lesson
-recurs: \emph{ClickHouse rewards matching the tool to the data's
+This brief reports a 19-million-row analytics benchmark on a
+3-replica AWS ClickHouse Cloud service. Across nine experiments the
+same lesson recurs: \emph{ClickHouse rewards matching the tool to the data's
 shape.} The right \texttt{ORDER BY}, codec, engine, batch size, or
 rollup pattern delivers $10$--$1000\times$ wins; the wrong one is
 sometimes $0.9\times$ (worse than no optimisation) and sometimes
@@ -176,8 +176,8 @@ CREATE TABLE events (
 \end{lstlisting}
 
 \queryHd
-We wrote 50{,}000 rows in four batch shapes — 100 / 1{,}000 / 10{,}000 /
-50{,}000 rows per \texttt{INSERT} — and timed each.
+50{,}000 rows written in four batch shapes — 100 / 1{,}000 / 10{,}000 /
+50{,}000 rows per \texttt{INSERT} — and timed.
 
 \resultsHd
 
@@ -244,7 +244,7 @@ CREATE TABLE events_type_first (...) ENGINE = MergeTree
 \end{lstlisting}
 
 \queryHd
-We ran the three filter shapes the analyst actually writes:
+The three filter shapes the analyst actually writes:
 \begin{lstlisting}
 SELECT count() FROM <events> WHERE user_id = 42;
 SELECT count() FROM <events> WHERE event_time >= now() - INTERVAL 7 DAY;
@@ -303,7 +303,7 @@ CREATE TABLE users_native (
 
 \queryHd
 Both tables hold the same 100{,}000 user rows from the same source.
-We measured per-table compressed and uncompressed size, then ran
+Per-table compressed and uncompressed sizes are measured, plus
 \texttt{SELECT count() WHERE country = 'US'} against each.
 
 \resultsHd
@@ -681,8 +681,8 @@ INSERT INTO events_part_day SELECT * FROM events;
 \end{lstlisting}
 
 \resultsHd
-The server lectures us with its own canonical error message before a
-single byte reaches disk:
+The server emits its own canonical error message before a single
+byte reaches disk:
 
 \begin{tcolorbox}[colback=accentred!8, colframe=accentred,
                   boxrule=0pt, leftrule=3pt, arc=2pt,

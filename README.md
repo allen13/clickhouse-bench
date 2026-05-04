@@ -2,6 +2,8 @@
 
 A UV-managed Python project for setting up, evaluating, and benchmarking ClickHouse Cloud. Generates realistic test data, runs a comprehensive suite of benchmark queries across multiple categories, and produces detailed performance reports with visualisations.
 
+> **📄 The brief:** [`clickhouse-shape-matching-brief.pdf`](clickhouse-shape-matching-brief.pdf) — a 10-page synthesis of every benchmark in this repo, organised around the recurring lesson the data shows: *ClickHouse rewards matching the tool to the data's shape.* Each section follows the same Schema → Query → Results → Lesson rhythm, with the measured wins (`613×` insert throughput, `4.8×` faster dashboards via MV, `850×` compression on monotonic columns with the right codec) and the cautionary numbers (`0.9×` — worse than nothing — when the codec is wrong; `TOO_MANY_PARTS` from a single bad partition key). Source at [`clickhouse-shape-matching-brief.tex`](clickhouse-shape-matching-brief.tex); rebuild with `make paper`.
+
 ## Quick Start
 
 ### 1. Prerequisites
