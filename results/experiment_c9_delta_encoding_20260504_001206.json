@@ -1,0 +1,103 @@
+{
+  "experiment_key": "c9_delta_encoding",
+  "timestamp": "20260504_001206",
+  "title": "Delta encoding behaviour: constant, monotonic, random",
+  "server": {
+    "clickhouse_version": "25.12.1.1497",
+    "user": "default",
+    "hostname": "c-asphaltaws-aq-58-server-9ri6grr-0",
+    "uptime_s": 75
+  },
+  "rows": 10000000,
+  "columns": [
+    {
+      "column": "zero_lz4",
+      "shape": "constant",
+      "codec": "LZ4",
+      "compressed_bytes": 450,
+      "uncompressed_bytes": 11007,
+      "ratio": 24.5
+    },
+    {
+      "column": "zero_delta",
+      "shape": "constant",
+      "codec": "Delta, LZ4",
+      "compressed_bytes": 450,
+      "uncompressed_bytes": 11007,
+      "ratio": 24.5
+    },
+    {
+      "column": "zero_dbldelta",
+      "shape": "constant",
+      "codec": "DoubleDelta, LZ4",
+      "compressed_bytes": 450,
+      "uncompressed_bytes": 11007,
+      "ratio": 24.5
+    },
+    {
+      "column": "mono_lz4",
+      "shape": "monotonic",
+      "codec": "LZ4",
+      "compressed_bytes": 40050357,
+      "uncompressed_bytes": 80000000,
+      "ratio": 2.0
+    },
+    {
+      "column": "mono_delta",
+      "shape": "monotonic",
+      "codec": "Delta, LZ4",
+      "compressed_bytes": 401701,
+      "uncompressed_bytes": 80000000,
+      "ratio": 199.2
+    },
+    {
+      "column": "mono_dbldelta",
+      "shape": "monotonic",
+      "codec": "DoubleDelta, LZ4",
+      "compressed_bytes": 94102,
+      "uncompressed_bytes": 80000000,
+      "ratio": 850.1
+    },
+    {
+      "column": "rand_lz4",
+      "shape": "random",
+      "codec": "LZ4",
+      "compressed_bytes": 80345525,
+      "uncompressed_bytes": 80000000,
+      "ratio": 1.0
+    },
+    {
+      "column": "rand_delta",
+      "shape": "random",
+      "codec": "Delta, LZ4",
+      "compressed_bytes": 80373654,
+      "uncompressed_bytes": 80000000,
+      "ratio": 1.0
+    },
+    {
+      "column": "rand_dbldelta",
+      "shape": "random",
+      "codec": "DoubleDelta, LZ4",
+      "compressed_bytes": 86652956,
+      "uncompressed_bytes": 80000000,
+      "ratio": 0.9
+    }
+  ],
+  "ratios": {
+    "constant": {
+      "LZ4": 24.5,
+      "Delta, LZ4": 24.5,
+      "DoubleDelta, LZ4": 24.5
+    },
+    "monotonic": {
+      "LZ4": 2.0,
+      "Delta, LZ4": 199.2,
+      "DoubleDelta, LZ4": 850.1
+    },
+    "random": {
+      "LZ4": 1.0,
+      "Delta, LZ4": 1.0,
+      "DoubleDelta, LZ4": 0.9
+    }
+  }
+}

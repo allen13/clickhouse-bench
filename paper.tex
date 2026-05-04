@@ -38,6 +38,10 @@
 % --- Fancy boxes -----------------------------------------------------------
 \usepackage[most]{tcolorbox}
 
+% Cell tints for highlighting wins / losses inside table cells.
+\newcommand{\winA}{\cellcolor{accentgreen!18}}
+\newcommand{\loseA}{\cellcolor{accentred!12}}
+
 % --- Figures ---------------------------------------------------------------
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -99,7 +103,9 @@
 \titleformat{\section}{\large\bfseries\color{accentblue}}{\thesection.}{0.6em}{}
 \titlespacing*{\section}{0pt}{1.4em}{0.4em}
 
-% --- The block headings (Schema / Query / Results) -------------------------
+% --- The block headings (Shape / Schema / Query / Results) ----------------
+\newcommand{\shape}[1]{%
+  \par\noindent\textit{\textbf{Shape:} #1}\par\smallskip}
 \newcommand{\schemaHd}{%
   \par\smallskip\noindent\textbf{\color{accentblue}Schema.}\par\nopagebreak\smallskip}
 \newcommand{\queryHd}{%
@@ -120,7 +126,7 @@
 
 % --- Title metadata --------------------------------------------------------
 \title{\Large\bfseries Evidence-based ClickHouse Performance:\\
-  Eight Schemas, Eight Queries, Eight Lessons}
+  Match the Tool to the Data's Shape}
 \author{Timothy Allen}
 \date{May 2026}
 
@@ -133,13 +139,15 @@
 \noindent
 \textbf{\color{accentblue}The headline.}
 We benchmarked a 19-million-row analytics workload on a 3-replica AWS
-ClickHouse Cloud service. Each section below shows
-\textbf{a schema}, \textbf{a query}, \textbf{the measured result},
-and the lesson the data supports.
-The wins are concrete: $613\times$ faster inserts, $4.8\times$ faster
-dashboards, $-37\%$ memory on small JOINs, $11\times$ tax for getting
-mutations wrong.
-Every number links to a JSON file in
+ClickHouse Cloud service. Across nine experiments the same lesson
+recurs: \emph{ClickHouse rewards matching the tool to the data's
+shape.} The right \texttt{ORDER BY}, codec, engine, batch size, or
+rollup pattern delivers $10$--$1000\times$ wins; the wrong one is
+sometimes $0.9\times$ (worse than no optimisation) and sometimes
+\texttt{TOO\_MANY\_PARTS}-bad. Each section below names the
+\textbf{shape}, then shows the \textbf{schema}, the \textbf{query},
+the \textbf{measured result}, and the \textbf{lesson} the data
+supports. Every number links to a JSON file in
 \href{run:results/}{\texttt{results/}};
 the supporting \emph{why} for each lesson is in the 15-lesson
 \href{run:docs/}{\texttt{docs/}} folder.
@@ -151,6 +159,8 @@ the supporting \emph{why} for each lesson is in the 15-lesson
 % =========================================================================
 \section{Batch your inserts}
 % =========================================================================
+
+\shape{many small writes vs.\ a few big writes.}
 
 \textbf{The setup.} A pipeline ingests a million customer events.
 The wrong batch size won't error — it'll just stay a step behind real-time
@@ -215,6 +225,8 @@ Single-row inserts in a loop are the fastest way to take a cluster down.}
 \section{Pick the right \texttt{ORDER BY}}
 % =========================================================================
 
+\shape{which column your queries filter on most.}
+
 \textbf{The setup.}
 Three teams build the \emph{same} \texttt{events} table with three
 different \texttt{ORDER BY} keys. Each team thinks theirs is fine — until
@@ -269,6 +281,8 @@ creation — ``fixing it later'' is a full-data migration.}
 \section{Use real types, not \texttt{String} for everything}
 % =========================================================================
 
+\shape{the natural type of your values — number, date, enum.}
+
 \textbf{The setup.}
 A common shortcut at prototype time: declare every column \texttt{String}
 and parse later. Cheap to type, expensive to scan.
@@ -317,8 +331,97 @@ because LZ4 papers over the difference, but the bytes flowing through
 RAM and CPU don't.}
 
 % =========================================================================
+\section{Pick a codec that matches the column's shape}
+% =========================================================================
+
+\shape{the value distribution \emph{within} a column —
+constant? monotonic? high-entropy random?}
+
+\textbf{The setup.}
+Three columns of the same type (\texttt{UInt64}), the same row count
+(10M), the same table — but the values follow three different shapes:
+\textbf{all zeros}, \textbf{n+1 monotonic}, and \textbf{random}.
+Three codec configurations applied to each shape.
+
+\schemaHd
+\begin{lstlisting}
+CREATE TABLE delta_demo (
+    id UInt64,
+    -- All zeros
+    zero_lz4      UInt64 CODEC(LZ4),
+    zero_delta    UInt64 CODEC(Delta, LZ4),
+    zero_dbldelta UInt64 CODEC(DoubleDelta, LZ4),
+    -- Monotonic n
+    mono_lz4      UInt64 CODEC(LZ4),
+    mono_delta    UInt64 CODEC(Delta, LZ4),
+    mono_dbldelta UInt64 CODEC(DoubleDelta, LZ4),
+    -- Random
+    rand_lz4      UInt64 CODEC(LZ4),
+    rand_delta    UInt64 CODEC(Delta, LZ4),
+    rand_dbldelta UInt64 CODEC(DoubleDelta, LZ4)
+) ENGINE = MergeTree() ORDER BY id
+SETTINGS min_bytes_for_wide_part = 0;  -- so per-column sizes split out
+\end{lstlisting}
+
+\queryHd
+\begin{lstlisting}
+INSERT INTO delta_demo
+SELECT
+    number AS id,
+    0,             0,             0,              -- constant
+    number,        number,        number,         -- monotonic
+    cityHash64(number), cityHash64(number), cityHash64(number)
+FROM numbers(10000000);
+
+-- Per-column compressed and uncompressed sizes
+SELECT column, sum(column_data_compressed_bytes),
+               sum(column_data_uncompressed_bytes)
+FROM system.parts_columns
+WHERE active AND table = 'delta_demo'
+GROUP BY column;
+\end{lstlisting}
+
+\resultsHd
+Compression ratios (uncompressed / compressed; higher is better):
+
+\renewcommand{\arraystretch}{1.20}
+\begin{tabularx}{\linewidth}{@{}X r r r@{}}
+\toprule
+\textbf{Column shape}         & \textbf{LZ4} & \textbf{Delta + LZ4} & \textbf{DoubleDelta + LZ4}\\
+\midrule
+\rowcolor{accentgreen!12}\textbf{Constant} (all zeros)
+                              & \textbf{24.5$\times$} & 24.5$\times$ & 24.5$\times$\\
+\rowcolor{accentgreen!12}\textbf{Monotonic} (n+1)
+                              & 2.0$\times$           & 199.2$\times$ & \textbf{850.1$\times$}\\
+\textbf{Random}               & 1.0$\times$           & 1.0$\times$   & \loseA \textbf{0.9$\times$ \emph{worse than nothing}}\\
+\bottomrule
+\end{tabularx}
+
+\smallskip
+The constant column compresses to 450 bytes regardless of codec —
+ClickHouse's serialiser detects the run of identical values
+automatically. The monotonic column collapses from 76 MiB to
+\textbf{91 KiB} under \texttt{DoubleDelta + LZ4}. The random column
+under \texttt{DoubleDelta + LZ4} is \emph{larger} than the raw data:
+the second-derivative transform adds CPU and bytes for nothing.
+Source: Phase~C9
+(\href{run:results/experiment_c9_delta_encoding_20260504_001206.json}{c9 JSON}).
+
+\lesson{%
+\textbf{$850\times$ on the right column shape; $0.9\times$ on the
+wrong one.} Codec choice is shape-driven, not type-driven.
+Monotonic columns (timestamps, sequential IDs, counters) want
+\texttt{Delta} or \texttt{DoubleDelta}. Random or high-entropy
+columns (UUIDs, hashes, encrypted blobs) should stay on the
+\texttt{LZ4} default — specialised codecs cost CPU for no benefit
+and can make storage \emph{worse}. Always benchmark on real data
+before committing.}
+
+% =========================================================================
 \section{One materialised view per dashboard}
 % =========================================================================
+
+\shape{the same aggregation, asked over and over.}
 
 \textbf{The setup.}
 A dashboard refreshes ``events per day, broken down by type'' every minute.
@@ -375,6 +478,8 @@ once. It's the best deal in ClickHouse.}
 % =========================================================================
 \section{Replace small JOINs with a dictionary}
 % =========================================================================
+
+\shape{a small, slowly-changing dimension joined many times.}
 
 \textbf{The setup.}
 A daily report joins 300{,}000 orders against a 100{,}000-row users
@@ -435,6 +540,8 @@ status maps, geography.}
 \section{Turn on the query cache for repeated dashboards}
 % =========================================================================
 
+\shape{an identical query repeated within a 60-second window.}
+
 \textbf{The setup.}
 Five users hit the same heavy aggregation in five tabs at 9:01~am
 every Monday. Without help, the cluster recomputes the same answer
@@ -488,6 +595,8 @@ results are non-deterministic and skip the cache anyway.}
 % =========================================================================
 \section{Don't mutate. Insert new versions.}
 % =========================================================================
+
+\shape{rows that change often vs.\ rows written once.}
 
 \textbf{The setup.}
 A 100{,}000-row \texttt{users} table needs 1\% of rows updated to
@@ -550,6 +659,8 @@ for one-off corrections, never for steady-state writes.}
 % =========================================================================
 \addcontentsline{toc}{section}{Bonus: how to crash your cluster in one INSERT}
 
+\shape{how many distinct partition values you'll create over the table's life.}
+
 \textbf{The setup.}
 The events spread over a multi-year window (Faker timestamps).
 Someone partitions by day, thinking it'll speed up time-range queries.
@@ -604,43 +715,53 @@ Aim for 100--1{,}000 distinct partitions total --- monthly
 % =========================================================================
 \addcontentsline{toc}{section}{The five-step playbook}
 
-The lessons above compose into a single review checklist. Apply in
-order; each step builds on the one before it.
+Every section above named a different shape, then matched a tool to
+it. The playbook is the same exercise turned into a checklist:
+\emph{name the shape first, then pick the tool}. Each row binds one
+to the other.
 
 \medskip
 \renewcommand{\arraystretch}{1.20}
-\begin{tabularx}{\linewidth}{@{}c X@{}}
+\begin{tabularx}{\linewidth}{@{}p{0.40\linewidth} X@{}}
 \toprule
-\textbf{\#} & \textbf{Step}\\
+\textbf{Shape}                                 & \textbf{Tool}\\
 \midrule
-1 & \textbf{Plan \texttt{ORDER BY} before \texttt{CREATE TABLE}.}
-    Low-cardinality columns first, high-cardinality last.
-    The leading column is the question you're optimising for.\\
-2 & \textbf{Use native types and \texttt{LowCardinality} for enums.}
-    Avoid \texttt{Nullable} unless the absence is semantic.\\
-3 & \textbf{Batch inserts at 10K--100K rows} (or set
-    \texttt{async\_insert=1, wait\_for\_async\_insert=1}).
-    Never insert single rows in a loop.\\
-4 & \textbf{Build an aggregating MV per dashboard query.}
-    Use \texttt{*State}/\texttt{*Merge} pairs in the MV definition.\\
-5 & \textbf{Reach for \texttt{dictGet}, query cache, and skip indexes
-    only after} \texttt{EXPLAIN ESTIMATE} \textbf{shows the primary
-    index alone isn't enough.}\\
+Many small writes vs.\ few big writes          & Batch to 10K--100K rows; or
+                                                 \texttt{async\_insert=1, wait\_for\_async\_insert=1}.\\
+Which column queries filter on most            & \texttt{ORDER BY} that
+                                                 column first; low-cardinality
+                                                 first, high-cardinality last.\\
+Natural type of values                         & Native types
+                                                 (\texttt{UInt64}, \texttt{Date},
+                                                 \texttt{LowCardinality(String)}); avoid
+                                                 \texttt{Nullable} unless absence is semantic.\\
+Value distribution in a column                 & Constant/monotonic →
+                                                 \texttt{Delta} / \texttt{DoubleDelta};
+                                                 random → \texttt{LZ4} default.
+                                                 \emph{Always benchmark.}\\
+Same aggregation asked over and over           & Aggregating materialised view
+                                                 with \texttt{*State}/\texttt{*Merge}.\\
+Small slowly-changing dimension joined often   & \texttt{Dictionary} +
+                                                 \texttt{dictGet} instead of \texttt{JOIN}.\\
+Identical query repeated within seconds        & \texttt{SETTINGS use\_query\_cache = 1}.\\
+Rows that change often                         & \texttt{ReplacingMergeTree}
+                                                 with \texttt{argMax} reads;
+                                                 \emph{never} \texttt{ALTER UPDATE}.\\
 \bottomrule
 \end{tabularx}
 
 \medskip
-And three things to flag in PR review:
+And three shape-matched anti-patterns to flag in PR review:
 \begin{itemize}
 \setlength\itemsep{0pt}
-\item \texttt{ALTER}-style \texttt{UPDATE} or \texttt{DELETE} for routine
-      writes --- use \texttt{ReplacingMergeTree} or
-      \texttt{DROP PARTITION} instead.
-\item \texttt{OPTIMIZE TABLE \ldots FINAL} on a recurring schedule ---
-      background merges already do that work.
-\item High-cardinality partition keys (\texttt{toDate} on multi-year
-      data, \texttt{user\_id}) --- aim for 100--1{,}000 partitions
-      total.
+\item \emph{Frequent updates met with} \texttt{ALTER UPDATE}/\texttt{DELETE} ---
+      use \texttt{ReplacingMergeTree} or \texttt{DROP PARTITION} instead.
+\item \emph{Steady ingest met with} \texttt{OPTIMIZE TABLE \ldots FINAL} on a
+      recurring schedule --- background merges already do that work.
+\item \emph{High-cardinality partition keys}
+      (\texttt{toDate} on multi-year data, \texttt{user\_id}) --- aim for
+      100--1{,}000 partitions total. The day you forget this is the day
+      Cloud pages you.
 \end{itemize}
 
 % =========================================================================
